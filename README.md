@@ -196,6 +196,12 @@ sh -c java -Djava.security.egd=file:/dev/./urandom -jar /codehub-admin-api-1.0.0
 ```
 It is important to setup the environment variables before to execute the application.
 
+The API documentation is embedded in the application as static html file, this can be accessed using the following URL template.
+
+```bash
+  http://[host:port]/api/index.html
+```
+
 ## File Manifest
 * src/main : Contains the source code
 * src/test : Contains the unit testing code.
