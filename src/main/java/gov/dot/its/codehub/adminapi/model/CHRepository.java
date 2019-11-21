@@ -2,9 +2,6 @@ package gov.dot.its.codehub.adminapi.model;
 
 import java.sql.Timestamp;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreType;
-
-@JsonIgnoreType
 @SuppressWarnings({"squid:S00100","squid:S00116","squid:S00117"})
 public class CHRepository {
 	private String id;
