@@ -58,5 +58,15 @@
     "name": "codehub.admin.api.origins",
     "type": "java.lang.String",
     "description": "A description for 'codehub.admin.api.origins'"
+  },
+  {
+    "name": "codehub.admin.api.methods",
+    "type": "java.lang.String",
+    "description": "A description for 'codehub.admin.api.methods'"
+  },
+  {
+    "name": "codehub.admin.api.origins",
+    "type": "java.lang.String",
+    "description": "A description for 'codehub.admin.api.origins'"
   }
 ]}
