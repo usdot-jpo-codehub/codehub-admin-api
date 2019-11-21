@@ -2,18 +2,24 @@ package gov.dot.its.codehub.adminapi.model;
 
 import java.sql.Timestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreType;
+
+@JsonIgnoreType
 @SuppressWarnings({"squid:S00100","squid:S00116","squid:S00117"})
 public class CHRepository {
 	private String id;
 	private String name;
 	private String owner;
-	private String repo;
 	private String url;
 	private String etag;
 	private String source;
 	private Timestamp last_modified;
 	private Timestamp last_ingested;
 	private boolean enabled;
+
+	public CHRepository() {
+		this.etag = "N/A";
+	}
 
 	public String getId() {
 		return id;
@@ -32,12 +38,6 @@ public class CHRepository {
 	}
 	public void setOwner(String owner) {
 		this.owner = owner;
-	}
-	public String getRepo() {
-		return repo;
-	}
-	public void setRepo(String repo) {
-		this.repo = repo;
 	}
 	public String getUrl() {
 		return url;

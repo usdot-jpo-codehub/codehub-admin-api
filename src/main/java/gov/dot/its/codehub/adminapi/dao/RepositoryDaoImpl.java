@@ -27,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.dot.its.codehub.adminapi.model.CHRepository;
@@ -75,6 +76,7 @@ public class RepositoryDaoImpl implements RepositoryDao {
 			Map<String, Object> sourceAsMap = hit.getSourceAsMap();
 
 			ObjectMapper mapper = new ObjectMapper();
+			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			CHRepository chRepository = mapper.convertValue(sourceAsMap, CHRepository.class);
 			chRepository.setId(hit.getId());
 			result.add(chRepository);
@@ -123,7 +125,7 @@ public class RepositoryDaoImpl implements RepositoryDao {
 	@Override
 	public String resetCache(String id) throws IOException {
 		Map<String, Object> map = new HashMap<>();
-		map.put("etag", "");
+		map.put("etag", "N/A");
 		map.put("last_modified", apiUtils.getTimestampFormat(apiUtils.getCurrentUtc(),"yyyy-MM-dd'T'HH:mm:ss'Z'"));
 
 		UpdateRequest updateRequest = new UpdateRequest(reposIndex, "_doc", id);
