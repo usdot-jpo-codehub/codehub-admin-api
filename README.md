@@ -258,7 +258,7 @@ Thank you to the Department of Transportation for funding to develop this projec
 
 ## CODE.GOV Registration Info
 * __Agency:__ DOT
-* __Short Description:__ CodeHub Admin API to interface ITS DataHub ElasticSearch.
+* __Short Description:__ CodeHub Admin API to interface ITS CodeHub ElasticSearch.
 * __Status:__ Beta
 * __Tags:__ CodeHub, DOT, Spring Boot, Java, ElasticSearch
 * __Labor Hours:__
