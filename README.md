@@ -1,7 +1,7 @@
 # codehub-admin-api
 CodeHub Admin API
 
-The Admin API of CodeHub has the function to administer the metadata information (documents) for the CodeHub Ingestion system. The API connect to an ElasticSearch storage system. The API will do actions on the Repos and Projects indexes.
+The Admin API of CodeHub has the function to administer the metadata information (documents) for the CodeHub Ingestion system. The API connect to an ElasticSearch storage system. The API will do actions on the Repos and Projects indexes. 
 
 ## Usage
 Once the application is running on a configured port the API uses the standard REST verbs to manipulate the data.
