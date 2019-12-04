@@ -1,0 +1,72 @@
+{"properties": [
+  {
+    "name": "codehub.admin.api.es.host",
+    "type": "java.lang.String",
+    "description": "A description for 'codehub.admin.api.es.host'"
+  },
+  {
+    "name": "codehub.admin.api.es.port",
+    "type": "java.lang.String",
+    "description": "A description for 'codehub.admin.api.es.port'"
+  },
+  {
+    "name": "codehub.admin.api.es.scheme",
+    "type": "java.lang.String",
+    "description": "A description for 'codehub.admin.api.es.scheme'"
+  },
+  {
+    "name": "codehub.admin.api.debug",
+    "type": "java.lang.String",
+    "description": "A description for 'codehub.admin.api.debug'"
+  },
+  {
+    "name": "codehub.admin.api.es.repos.index",
+    "type": "java.lang.String",
+    "description": "A description for 'codehub.admin.api.es.repos.index'"
+  },
+  {
+    "name": "codehub.admin.api.es.repos.fields",
+    "type": "java.lang.String",
+    "description": "A description for 'codehub.admin.api.es.repos.fields'"
+  },
+  {
+    "name": "codehub.admin.api.es.projects.index",
+    "type": "java.lang.String",
+    "description": "A description for 'codehub.admin.api.es.projects.index'"
+  },
+  {
+    "name": "codehub.admin.api.es.projects.fields",
+    "type": "java.lang.String",
+    "description": "A description for 'codehub.admin.api.es.projects.fields'"
+  },
+  {
+    "name": "codehub.admin.api.chtoken",
+    "type": "java.lang.String",
+    "description": "A description for 'codehub.admin.api.chtoken'"
+  },
+  {
+    "name": "codehub.admin.api.origins",
+    "type": "java.lang.String",
+    "description": "A description for 'codehub.admin.api.origins'"
+  },
+  {
+    "name": "codehub.admin.api.debug",
+    "type": "java.lang.String",
+    "description": "A description for 'codehub.admin.api.debug'"
+  },
+  {
+    "name": "codehub.admin.api.origins",
+    "type": "java.lang.String",
+    "description": "A description for 'codehub.admin.api.origins'"
+  },
+  {
+    "name": "codehub.admin.api.methods",
+    "type": "java.lang.String",
+    "description": "A description for 'codehub.admin.api.methods'"
+  },
+  {
+    "name": "codehub.admin.api.origins",
+    "type": "java.lang.String",
+    "description": "A description for 'codehub.admin.api.origins'"
+  }
+]}
