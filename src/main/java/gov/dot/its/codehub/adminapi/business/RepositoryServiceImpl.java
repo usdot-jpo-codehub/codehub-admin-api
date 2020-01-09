@@ -83,7 +83,7 @@ public class RepositoryServiceImpl implements RepositoryService {
 
 	@Override
 	public ApiResponse<CHRepository> addRepository(HttpServletRequest request, CHRepository chRepository) {
-		chRepository.setId(apiUtils.getMd5(chRepository.getUrl()));
+		chRepository.setId(apiUtils.getMd5(chRepository.getSourceData().getRepositoryUrl()));
 
 		logger.info(String.format(MESSAGE_TEMPLATE,"Request: Add Repository.", chRepository.getId()));
 		final String RESPONSE_MESSAGE = "Response: Add Repository. ";

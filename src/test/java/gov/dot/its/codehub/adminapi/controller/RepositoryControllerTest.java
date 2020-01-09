@@ -72,7 +72,7 @@ class RepositoryControllerTest {
 
 	@MockBean
 	private RepositoryService repositoryService;
-	
+
 	@Test
 	void testInvalidToken() throws Exception { //NOSONAR
 		MockHttpServletRequest request = new MockHttpServletRequest();
@@ -156,7 +156,7 @@ class RepositoryControllerTest {
 		assertTrue(responseApi.getResult() != null);
 		assertTrue(!responseApi.getResult().isEmpty());
 	}
-	
+
 	@Test
 	void testRepositoriesNoData() throws Exception { //NOSONAR
 		MockHttpServletRequest request = new MockHttpServletRequest();
@@ -195,7 +195,7 @@ class RepositoryControllerTest {
 		assertTrue(responseApi.getMessages() == null);
 		assertTrue(responseApi.getResult() == null);
 	}
-	
+
 	@Test
 	void testRepositoriesError() throws Exception { //NOSONAR
 		final String verb = "GET";
@@ -204,7 +204,7 @@ class RepositoryControllerTest {
 
 		List<ApiError> errors = new ArrayList<>();
 		errors.add(new ApiError(ERROR_DESCRIPTION));
-		
+
 		ApiResponse<List<CHRepository>> apiResponse = new ApiResponse<>();
 		apiResponse.setResponse(HttpStatus.INTERNAL_SERVER_ERROR, null, null, errors, request);
 
@@ -285,7 +285,7 @@ class RepositoryControllerTest {
 		assertTrue(responseApi.getErrors() == null);
 		assertTrue(responseApi.getMessages() == null);
 	}
-	
+
 	@Test
 	void testAddRepositoryConflict() throws Exception { //NOSONAR
 		final String verb = "POST";
@@ -296,7 +296,7 @@ class RepositoryControllerTest {
 
 		List<ApiError> errors = new ArrayList<>();
 		errors.add(new ApiError(ERROR_DESCRIPTION));
-		
+
 		ApiResponse<CHRepository> apiResponse = new ApiResponse<>();
 		apiResponse.setResponse(HttpStatus.CONFLICT, chRepository, null, errors, request);
 
@@ -335,7 +335,7 @@ class RepositoryControllerTest {
 		assertTrue(responseApi.getErrors() != null);
 		assertTrue(responseApi.getMessages() == null);
 	}
-	
+
 	@Test
 	void testAddRepositoryError() throws Exception { //NOSONAR
 		final String verb = "POST";
@@ -344,9 +344,9 @@ class RepositoryControllerTest {
 
 		List<ApiError> errors = new ArrayList<>();
 		errors.add(new ApiError(ERROR_DESCRIPTION));
-		
+
 		CHRepository chRepository = this.getFakeCHRepository();
-		
+
 		ApiResponse<CHRepository> apiResponse = new ApiResponse<>();
 		apiResponse.setResponse(HttpStatus.INTERNAL_SERVER_ERROR, null, null, errors, request);
 
@@ -429,7 +429,7 @@ class RepositoryControllerTest {
 		assertTrue(responseApi.getMessages() == null);
 		assertTrue(responseApi.getResult() instanceof CHRepository);
 	}
-	
+
 	@Test
 	void testUpdateRepositoryError() throws Exception { //NOSONAR
 		final String verb = "PUT";
@@ -518,7 +518,7 @@ class RepositoryControllerTest {
 		assertTrue(responseApi.getResult() instanceof String);
 		assertTrue(responseApi.getMessages() == null);
 	}
-	
+
 	@Test
 	void testDeleteRepositoryNotFound() throws Exception { //NOSONAR
 		MockHttpServletRequest request = new MockHttpServletRequest();
@@ -563,7 +563,7 @@ class RepositoryControllerTest {
 		assertTrue(responseApi.getResult() instanceof String);
 		assertTrue(responseApi.getMessages() != null);
 	}
-	
+
 	@Test
 	void testDeleteRepositoryError() throws Exception { //NOSONAR
 		MockHttpServletRequest request = new MockHttpServletRequest();
@@ -621,7 +621,7 @@ class RepositoryControllerTest {
 		List<ApiMessage> messages = new ArrayList<>();
 		messages.add(new ApiMessage(MESSAGE_DESCRIPTION));
 		List<ApiError> errors = new ArrayList<>();
-		
+
 		ApiResponse<List<String>> apiResponse = new ApiResponse<>();
 		apiResponse.setResponse(HttpStatus.OK, ids, messages, errors, request);
 
@@ -659,7 +659,7 @@ class RepositoryControllerTest {
 		assertTrue(responseApi.getMessages() != null);
 		assertTrue(responseApi.getErrors() == null);
 	}
-	
+
 	@Test
 	void testDeleteRepositoriesError() throws Exception { //NOSONAR
 		MockHttpServletRequest request = new MockHttpServletRequest();
@@ -674,7 +674,7 @@ class RepositoryControllerTest {
 		errors.add(new ApiError(ERROR_DESCRIPTION));
 		List<ApiMessage> messages = new ArrayList<>();
 		messages.add(new ApiMessage(MESSAGE_DESCRIPTION));
-		
+
 		ApiResponse<List<String>> apiResponse = new ApiResponse<>();
 		apiResponse.setResponse(HttpStatus.INTERNAL_SERVER_ERROR, null, messages, errors, request);
 
@@ -712,7 +712,7 @@ class RepositoryControllerTest {
 		assertTrue(responseApi.getErrors() != null);
 		assertTrue(!responseApi.getErrors().isEmpty());
 		assertTrue(responseApi.getMessages() != null);
-		
+
 	}
 
 	@Test
@@ -725,7 +725,7 @@ class RepositoryControllerTest {
 		ids.add(HASH_ID_2);
 		ids.add(HASH_ID_1);
 		ids.add(HASH_ID_3);
-		
+
 		List<ApiError> errors = new ArrayList<>();
 		List<ApiMessage> messages = new ArrayList<>();
 		messages.add(new ApiMessage(MESSAGE_DESCRIPTION));
@@ -768,7 +768,7 @@ class RepositoryControllerTest {
 		assertEquals(verb, responseApi.getVerb());
 		assertTrue(responseApi.getResult() != null);
 	}
-	
+
 	@Test
 	void testResetCacheError() throws Exception { //NOSONAR
 		final String verb = "PATCH";
@@ -779,7 +779,7 @@ class RepositoryControllerTest {
 		ids.add(HASH_ID_1);
 		ids.add(HASH_ID_3);
 		ids.add(HASH_ID_2);
-		
+
 		List<ApiError> errors = new ArrayList<>();
 		List<ApiMessage> messages = new ArrayList<>();
 		errors.add(new ApiError(ERROR_DESCRIPTION));
@@ -841,26 +841,21 @@ class RepositoryControllerTest {
 
 	private CHRepository getFakeCHRepository(String id, String name, String owner, String url) {
 		CHRepository chRepository = new CHRepository();
-		chRepository.setEnabled(true);
-		chRepository.setName(name);
 		chRepository.setId(id);
-		chRepository.setOwner(owner);
-		chRepository.setUrl(url);
-		chRepository.setLast_modified(new Timestamp(System.currentTimeMillis()));
-		chRepository.setEtag("c99aa9c9867ddb8693e7740d0ca0c00f");
+
+		chRepository.getSourceData().setName(name);
+		chRepository.getSourceData().getOwner().setName(owner);
+		chRepository.getSourceData().setRepositoryUrl(url);
+
+		chRepository.getCodehubData().setIngestionEnabled(true);
+		chRepository.getCodehubData().setLastModified(new Timestamp(System.currentTimeMillis()));
+		chRepository.getCodehubData().setEtag("c99aa9c9867ddb8693e7740d0ca0c00f");
+
 		return chRepository;
 	}
 
 	private CHRepository getFakeCHRepository() {
-		CHRepository chRepository = new CHRepository();
-		chRepository.setEnabled(true);
-		chRepository.setName("Repository-Name");
-		chRepository.setId(HASH_ID_1);
-		chRepository.setOwner("Repository-Owner");
-		chRepository.setUrl("http://www.example.com/owner/repository");
-		chRepository.setLast_modified(new Timestamp(System.currentTimeMillis()));
-		chRepository.setEtag("c99aa9c9867ddb8693e7740d0ca0c00f");
-		return chRepository;
+		return this.getFakeCHRepository(HASH_ID_1, "Repository-Name", "Repository-Owner", "http://www.example.com/owner/repository");
 	}
 
 }
