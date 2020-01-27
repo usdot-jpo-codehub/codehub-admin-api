@@ -2,7 +2,6 @@ package gov.dot.its.codehub.adminapi.dao;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +22,7 @@ import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.fetch.subphase.FetchSourceContext;
+import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
@@ -38,9 +38,12 @@ public class RepositoryDaoImpl implements RepositoryDao {
 
 	@Value("${codehub.admin.api.es.repos.index}")
 	private String reposIndex;
-
 	@Value("${codehub.admin.api.es.repos.fields}")
 	private String[] includedFields;
+	@Value("${codehub.admin.api.es.sort.by}")
+	private String sortBy;
+	@Value("${codehub.admin.api.es.sort.order}")
+	private String sortOrder;
 
 	@Autowired
 	private ObjectMapper objectMapper;
@@ -62,6 +65,8 @@ public class RepositoryDaoImpl implements RepositoryDao {
 
 		searchSourceBuilder.size(limit);
 		searchSourceBuilder.fetchSource(includedFields, new String[] {});
+		SortOrder so = sortOrder.equalsIgnoreCase("desc") ? SortOrder.DESC : SortOrder.ASC;
+		searchSourceBuilder.sort(sortBy, so);
 		searchRequest.source(searchSourceBuilder);
 
 		SearchResponse searchResponse = null;
@@ -87,10 +92,9 @@ public class RepositoryDaoImpl implements RepositoryDao {
 
 	@Override
 	public String addRepository(CHRepository chRepository) throws IOException {
-		chRepository.setLast_modified(apiUtils.getCurrentUtc());
+		chRepository.getCodehubData().setLastModified(apiUtils.getCurrentUtc());
 		@SuppressWarnings("unchecked")
 		Map<String, Object> map = objectMapper.convertValue(chRepository, Map.class);
-		map.remove("id");
 
 		IndexRequest indexRequest = new IndexRequest(reposIndex, "_doc", chRepository.getId());
 		indexRequest.source(map, XContentType.JSON);
@@ -102,10 +106,9 @@ public class RepositoryDaoImpl implements RepositoryDao {
 
 	@Override
 	public String updateRepository(CHRepository chRepository) throws IOException {
-		chRepository.setLast_modified(apiUtils.getCurrentUtc());
+		chRepository.getCodehubData().setLastModified(apiUtils.getCurrentUtc());
 		@SuppressWarnings("unchecked")
 		Map<String, Object> map = objectMapper.convertValue(chRepository, Map.class);
-		map.remove("id");
 
 		UpdateRequest updateRequest = new UpdateRequest(reposIndex, "_doc", chRepository.getId());
 		updateRequest.doc(map, XContentType.JSON);
@@ -124,12 +127,11 @@ public class RepositoryDaoImpl implements RepositoryDao {
 
 	@Override
 	public String resetCache(String id) throws IOException {
-		Map<String, Object> map = new HashMap<>();
-		map.put("etag", "N/A");
-		map.put("last_modified", apiUtils.getTimestampFormat(apiUtils.getCurrentUtc(),"yyyy-MM-dd'T'HH:mm:ss'Z'"));
+
+		String jsonObj = "{\"codehubData\":{\"etag\":\"N/A\",\"lastModified\":\""+apiUtils.getTimestampFormat(apiUtils.getCurrentUtc(),"yyyy-MM-dd'T'HH:mm:ss'Z'")+"\"}}";
 
 		UpdateRequest updateRequest = new UpdateRequest(reposIndex, "_doc", id);
-		updateRequest.doc(map, XContentType.JSON);
+		updateRequest.doc(jsonObj, XContentType.JSON);
 
 		UpdateResponse updateResponse = restHighLevelClient.update(updateRequest, RequestOptions.DEFAULT);
 

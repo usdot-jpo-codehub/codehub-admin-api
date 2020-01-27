@@ -2,7 +2,6 @@ package gov.dot.its.codehub.adminapi.utils;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -73,25 +72,25 @@ public class ApiUtils {
 		} 
 	}
 
-	public Timestamp getCurrentUtc() {
-		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+	public Date getCurrentUtc() {
+		Date date = new Date();
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 		df.setTimeZone(TimeZone.getTimeZone("UTC"));
-		String timstampStr = df.format(timestamp);
+		String timstampStr = df.format(date);
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 		Date parsedDate;
 		try {
 			parsedDate = dateFormat.parse(timstampStr);
-			return new Timestamp(parsedDate.getTime());
+			return parsedDate;
 		} catch (ParseException e) {
-			return timestamp;
+			return date;
 		}
 	}
 
-	public String getTimestampFormat(Timestamp timestamp, String format) {
+	public String getTimestampFormat(Date date, String format) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat(format);
 		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-		return dateFormat.format(timestamp);
+		return dateFormat.format(date);
 	}
 
 	public List<ApiError> getErrorsFromException(List<ApiError> errors, Exception e) {

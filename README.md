@@ -1,7 +1,14 @@
 # codehub-admin-api
 CodeHub Admin API
+> Version: 2.0.0
 
 The Admin API of CodeHub has the function to administer the metadata information (documents) for the CodeHub Ingestion system. The API connect to an ElasticSearch storage system. The API will do actions on the Repos and Projects indexes. 
+
+## Change Log
+Changes related to the prvious version.
+
+> Previous Version: 1.0.0
+- Change in structure of CHRepository due a consolidation of Indexes in ElasticSearch.
 
 ## Usage
 Once the application is running on a configured port the API uses the standard REST verbs to manipulate the data.
@@ -52,16 +59,29 @@ The following entries are the endpoint to administer the data in the Repos Index
 ```json
 {
   "id" : "91128507a8ae9c8046c33ee0f31e37f8",
-  "codehub_id" : null,
-  "name" : "Repository-Name",
-  "owner" : "Repository-Owner",
-  "repo" : null,
-  "url" : "http://www.example.com/owner/repository",
-  "etag" : "c99aa9c9867ddb8693e7740d0ca0c00f",
-  "source" : null,
-  "last_modified" : "2019-11-20T22:37:49.686+0000",
-  "last_ingested" : null,
-  "enabled" : true
+  "sourceData" : {
+    "name" : "Repository-Name",
+    "repositoryUrl" : "http://www.example.com/owner/repository",
+    "owner" : {
+      "name" : "Repository-Owner"
+    }
+  },
+  "generatedData" : {
+    "rank" : 0
+  },
+  "codehubData" : {
+    "etag" : "c99aa9c9867ddb8693e7740d0ca0c00f",
+    "source" : null,
+    "lastModified" : "2019-12-19T23:02:02.083+0000",
+    "lastIngested" : null,
+    "badges" : {
+      "status" : null,
+      "isFeatured" : false
+    },
+    "isIngestionEnabled" : true,
+    "isIngested" : false,
+    "isVisible" : false
+  }
 }
 ```
 
@@ -74,16 +94,29 @@ The following entries are the endpoint to administer the data in the Repos Index
 ```json
 {
   "id" : "91128507a8ae9c8046c33ee0f31e37f8",
-  "codehub_id" : null,
-  "name" : "Repository-Name",
-  "owner" : "Repository-Owner",
-  "repo" : null,
-  "url" : "http://www.example.com/owner/repository",
-  "etag" : "c99aa9c9867ddb8693e7740d0ca0c00f",
-  "source" : null,
-  "last_modified" : "2019-11-20T22:37:49.703+0000",
-  "last_ingested" : null,
-  "enabled" : true
+  "sourceData" : {
+    "name" : "Repository-Name",
+    "repositoryUrl" : "http://www.example.com/owner/repository",
+    "owner" : {
+      "name" : "Repository-Owner"
+    }
+  },
+  "generatedData" : {
+    "rank" : 0
+  },
+  "codehubData" : {
+    "etag" : "c99aa9c9867ddb8693e7740d0ca0c00f",
+    "source" : null,
+    "lastModified" : "2019-12-19T23:02:02.102+0000",
+    "lastIngested" : null,
+    "badges" : {
+      "status" : null,
+      "isFeatured" : false
+    },
+    "isIngestionEnabled" : true,
+    "isIngested" : false,
+    "isVisible" : false
+  }
 }
 ```
 
@@ -114,65 +147,6 @@ The following entries are the endpoint to administer the data in the Repos Index
 [ "91128507a8ae9c8046c33ee0f31e37f8", "7f3bac27fc81d39ffa8ede58b39c8fb6", "fc4e98b95dc24f763621c54fe50ded24" ]
 ```
 
----
-
-## Project
-The following entries are the endpoints to administer the data in the Projects Index.
-
-### List Projects
-
-  - Method: GET
-  - URL: http://[host:port]/api/v1/projects
-
-### Add Project
-
- - Method: POST
- - URL: http://[host:port]/api/v1/projects
- - Content-Type: application/json
- - Payload (sample)
-```json
-{
-  "id" : "91128507a8ae9c8046c33ee0f31e37f8",
-  "repository_url" : "http://www.example.com/owner%d/repository",
-  "badges" : {
-    "status" : "ready-only"
-  }
-}
-```
-
-### Update Project
-
- - Method: PUT
- - URL: http://[host:port]/api/v1/projects
- - Content-Type: application/json
- - Payload (sample)
-```json
-{
-  "id" : "91128507a8ae9c8046c33ee0f31e37f8",
-  "repository_url" : "http://www.example.com/owner%d/repository",
-  "badges" : {
-    "status" : "ready-only"
-  }
-}
-```
-
-### Delete Project
-
- - Method: DELETE
- - URL: http://[host:port]/api/v1/projects/**{ID}**
- - Content-Type: application/json
-
-
-### Delete Multiple Projects
-
- - Method: DELETE
- - URL: http://[host:port]/api/v1/projects
- - Content-Type: application/json
- - Payload (sample): array of IDs
-```json
-[ "91128507a8ae9c8046c33ee0f31e37f8", "7f3bac27fc81d39ffa8ede58b39c8fb6", "fc4e98b95dc24f763621c54fe50ded24" ]
-```
-
 ## Configuration
 The API requires the following environment variables
 
@@ -183,6 +157,9 @@ The API requires the following environment variables
 |codehub.admin.api.es.port|mandatory||Sets the port that the target ElasticSearch is using.|
 |codehub.admin.api.es.scheme|mandatory||Sets the protocol scheme used by the target ElasticSearch (http or https)|
 |codehub.admin.api.chtoken|mandatory||Token for request authorization|
+|codehub.admin.api.es.repos.index|optional|repositories|Index name in ElasticSearch that contains the data.|
+|codehub.admin.api.es.sort.by|optional|codehubData.lastModified|Field name that will be used for default sorting.|
+|codehub.admin.api.es.sort.order|optional|desc|Sorting direction (asc, desc).|
 |codehub.admin.api.origins|optional|*|Whitelist clients to avoid CORS.|
 |server.servlet.context-path|optional|/api|Set the DataHub Web API context path|
 |server.port|optional|3007|Sets the DataHub Web API listening port|
@@ -192,7 +169,7 @@ The API requires the following environment variables
 The API is a Java application and can be executed updating the values of the following command template.
 
 ```bash
-sh -c java -Djava.security.egd=file:/dev/./urandom -jar /codehub-admin-api-1.0.0.jar"
+sh -c java -Djava.security.egd=file:/dev/./urandom -jar /codehub-admin-api-2.0.0.jar"
 ```
 It is important to setup the environment variables before to execute the application.
 
@@ -218,7 +195,7 @@ The API documentation is embedded in the application as static html file, this c
 ## Docker Support
 A [Docker](https://www.docker.com/) image can be build with the next command line.
 ```bash
-  docker build -t codehub-admin-api:1.0.0 .
+  docker build -t codehub-admin-api:2.0.0 .
 ```
 
 The following command with the correct values for the environment variable will start a Docker container.
@@ -229,11 +206,14 @@ docker run -p 3007:3007 --rm \
 -e "codehub.admin.api.es.host=[HOST]" \
 -e "codehub.admin.api.es.port=[PORT]" \
 -e "codehub.admin.api.es.scheme=[SCHEME]" \
--t -i codehub-admin-api:1.0.0
+-t -i codehub-admin-api:2.0.0
 ```
 
 
 ## Release History
+* 2.0.0
+  * Structural change due a consolidation of the Indexes in ElasticSearch.
+
 * 1.0.0
   * Initial version
 
