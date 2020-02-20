@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
+import java.util.UUID;
 
 import javax.xml.bind.DatatypeConverter;
 
@@ -24,10 +25,10 @@ import gov.dot.its.codehub.adminapi.model.ApiError;
 public class ApiUtils {
 
 	private static final Logger logger = LoggerFactory.getLogger(ApiUtils.class);
-	
+
 	@Value("${codehub.admin.api.debug}")
 	private boolean debug;
-	
+
 	private static final String MESSAGE_TEMPLATE = "%s : %s ";
 	private static final String ERROR_LABEL = "Error";
 
@@ -107,4 +108,9 @@ public class ApiUtils {
 		}
 		return errors;
 	}
+
+	public String getUUID() {
+		return UUID.randomUUID().toString();
+	}
+
 }

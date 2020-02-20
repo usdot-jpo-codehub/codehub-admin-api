@@ -147,4 +147,19 @@ public class RepositoryDaoImpl implements RepositoryDao {
 
 		return restHighLevelClient.exists(getRequest, RequestOptions.DEFAULT);
 	}
+
+	@Override
+	public String removeCategory(String categoryId) throws IOException {
+		List<CHRepository> repositories = this.getAll(1000);
+		StringBuilder stringBuilder = new StringBuilder();
+		for(CHRepository repository: repositories) {
+			 if (repository.getCodehubData().getCategories().isEmpty() || !repository.getCodehubData().getCategories().contains(categoryId)) {
+				 continue;
+			 }
+			 repository.getCodehubData().getCategories().remove(categoryId);
+			 stringBuilder.append(String.format("Category [%s] removed from [%s]%n", categoryId, repository.getSourceData().getName()));
+			 this.updateRepository(repository);
+		 }
+		return stringBuilder.toString();
+	}
 }

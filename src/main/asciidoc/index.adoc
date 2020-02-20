@@ -5,16 +5,18 @@
 = ITS CodeHub
 
 == Admin API
-`version: 2.0.0`
+`version: 2.5.0`
 
 The Admin API of CodeHub has the function to administer the metadata information for the CodeHub Ingestion system. The API connect to an https://www.elastic.co/products/enterprise-search[ElasticSearch] storage system
 
 === Change Log
 Changes related to the previous version.
 
-`Previous version: 1.0.0`
+`Previous version: 2.0.0`
 
-* Structure of CHRepository change due a consolidation of Indexes in the Elasticsearch.
+* Change repository structure to add **categories** under **codehubData** structure.
+* Add end-point for Configurations/Categories to manages operations of List, Add, Update, Delete Categories.
+* New structure **CHConfiguration** was added.
 
 
 
@@ -79,6 +81,7 @@ The repository information is presented through an structure (CHRepository) that
 |lastModified|Date|Date of the last modification of the metadata information for the repository.
 |lastIngested|Date|Date when was the last time that the repository was Ingested.
 |badges|*CHBadges*|Structure that contains information about repository Badges.
+|categories|List<**CHCategory**>|List of categories.
 |===
 
 *CHBadges*
@@ -88,6 +91,28 @@ The repository information is presented through an structure (CHRepository) that
 //-------------
 |isFeatured|boolean|Sets whether he repository will be displayed in the Featured are in the user interface.
 |status|String|Status of the repository.
+|===
+
+*CHConfiguration*
+[options="header",cols="1,1,2"]
+|===
+|Name   |Type   |Description
+//-------------
+|id|String|Configuration ID
+|name|String|Configuration Name.
+|categories|List<**CHCategory**>|List of categories.
+|===
+
+*CHCategory*
+[options="header",cols="1,1,2"]
+|===
+|Name   |Type   |Description
+//-------------
+|id|String|UUID for the category (dynamically generated)
+|name|String|Category Name.
+|description|String|Description for the category.
+|isEnabled|boolean|Flag to detect whether the category is enabled or not.
+|lastModified|Date|Last Date when the category was modified.
 |===
 
 
@@ -212,3 +237,79 @@ include::{snippets}/api/v1/repositories/resetcache-ok/http-response.adoc[]
 ===== Error
 include::{snippets}/api/v1/repositories/resetcache-error/http-response.adoc[]
 
+
+== Configurations
+List the default configuration.
+
+==== Request
+include::{snippets}/api/v1/configurations/data/http-request.adoc[]
+
+===== cURL Sample
+include::{snippets}/api/v1/configurations/data/curl-request.adoc[]
+
+
+==== Response
+
+===== Success
+include::{snippets}/api/v1/configurations/data/http-response.adoc[]
+
+
+=== Categories
+List the available categories.
+
+==== Request
+include::{snippets}/api/v1/configurations/categories/data/http-request.adoc[]
+
+===== cURL Sample
+include::{snippets}/api/v1/configurations/categories/data/curl-request.adoc[]
+
+
+==== Response
+
+===== Success
+include::{snippets}/api/v1/configurations/categories/data/http-response.adoc[]
+
+=== Add Category
+Add new Category.
+
+==== Request
+include::{snippets}/api/v1/configurations/categories/add-ok/http-request.adoc[]
+
+===== cURL Sample
+include::{snippets}/api/v1/configurations/categories/add-ok/curl-request.adoc[]
+
+
+==== Response
+
+===== Success
+include::{snippets}/api/v1/configurations/categories/add-ok/http-response.adoc[]
+
+=== Update Category
+Update existing Category.
+
+==== Request
+include::{snippets}/api/v1/configurations/categories/update-ok/http-request.adoc[]
+
+===== cURL Sample
+include::{snippets}/api/v1/configurations/categories/update-ok/curl-request.adoc[]
+
+
+==== Response
+
+===== Success
+include::{snippets}/api/v1/configurations/categories/update-ok/http-response.adoc[]
+
+=== Delete Category
+Delete existing Category.
+
+==== Request
+include::{snippets}/api/v1/configurations/categories/delete-ok/http-request.adoc[]
+
+===== cURL Sample
+include::{snippets}/api/v1/configurations/categories/delete-ok/curl-request.adoc[]
+
+
+==== Response
+
+===== Success
+include::{snippets}/api/v1/configurations/categories/delete-ok/http-response.adoc[]

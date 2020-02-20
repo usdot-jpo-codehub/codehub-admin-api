@@ -19,4 +19,6 @@ public interface RepositoryDao {
 
 	boolean docExists(String id) throws IOException;
 
+	String removeCategory(String categoryId) throws IOException;
+
 }
