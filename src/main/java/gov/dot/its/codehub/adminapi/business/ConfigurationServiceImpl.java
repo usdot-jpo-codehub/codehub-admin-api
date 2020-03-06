@@ -273,4 +273,39 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 		}
 	}
 
+	@Override
+	public ApiResponse<List<String>> categoryImages(HttpServletRequest request) {
+		logger.info("Request: category images");
+		final String RESPONSE_MSG = "Response: GET Category images. ";
+
+		ApiResponse<List<String>> apiResponse = new ApiResponse<>();
+		List<ApiError> errors = new ArrayList<>();
+
+		if (!headerUtils.validateToken(request.getHeader(CHTOKEN_KEY))) {
+			logger.warn(String.format(MESSAGE_TEMPLATE, RESPONSE_MSG, MESSAGE_INVALID_TOKEN));
+			errors.add(new ApiError(MESSAGE_INVALID_TOKEN));
+			apiResponse.setResponse(HttpStatus.UNAUTHORIZED, null, null, errors, request);
+			return apiResponse;
+		}
+
+		try {
+
+			List<String> images = configurationDao.getCategoryImages();
+
+			if (images != null && !images.isEmpty()) {
+				apiResponse.setResponse(HttpStatus.OK, images, null, null, request);
+				logger.info(String.format(MESSAGE_TEMPLATE, RESPONSE_MSG,HttpStatus.OK.toString()+" "+images.size()));
+				return apiResponse;
+			}
+
+			apiResponse.setResponse(HttpStatus.NO_CONTENT, null, null, null, request);
+			logger.info(String.format(MESSAGE_TEMPLATE, RESPONSE_MSG, HttpStatus.NO_CONTENT.toString()));
+			return apiResponse;
+
+
+		} catch(ElasticsearchStatusException | IOException e) {
+			return apiResponse.setResponse(HttpStatus.INTERNAL_SERVER_ERROR, null, null, apiUtils.getErrorsFromException(errors, e), request);
+		}
+	}
+
 }

@@ -283,6 +283,34 @@ class ConfigurationControllerTest {
 		assertTrue(responseApi.getMessages() == null);
 	}
 
+	@Test
+	void testCategoryImages() throws Exception { //NOSONAR
+		MockHttpServletRequest request = new MockHttpServletRequest();
+		request.setMethod("GET");
+
+		List<String> images = new ArrayList<>();
+		images.add("Image-File-1");
+		images.add("Image-File-2");
+
+		ApiResponse<List<String>> apiResponse = new ApiResponse<>();
+		apiResponse.setResponse(HttpStatus.OK, images, null, null, request);
+
+		when(configurationService.categoryImages(any(HttpServletRequest.class))).thenReturn(apiResponse);
+
+		ResultActions resultActions = this.prepareResultActions("%s/v1/images/categories","api/v1/images/categories/data");
+
+		MvcResult result = resultActions.andReturn();
+		String objString = result.getResponse().getContentAsString();
+
+		TypeReference<ApiResponse<List<String>>> valueType = new TypeReference<ApiResponse<List<String>>>(){};
+		ApiResponse<List<String>> responseApi = objectMapper.readValue(objString, valueType);
+
+		assertEquals(HttpStatus.OK.value(), responseApi.getCode());
+		assertTrue(responseApi.getMessages() == null);
+		assertTrue(responseApi.getErrors() == null);
+		assertTrue(responseApi.getResult() != null);
+	}
+
 	private ResultActions prepareResultActions(String testUrlTemplate, String documentPath) throws Exception { //NOSONAR
 		return this.mockMvc.perform(
 				get(String.format(testUrlTemplate, env.getProperty(SERVER_SERVLET_CONTEXT_PATH)))
@@ -325,6 +353,9 @@ class ConfigurationControllerTest {
 		category.setId(UUID.randomUUID().toString());
 		category.setLastModified(new Date());
 		category.setName(String.format("Category-%s", id));
+		category.setImageFileName("http://path.to.the.image/image1.png");
+		category.setOrderPopular(1L);
+		category.setPopular(true);
 
 		return category;
 	}
