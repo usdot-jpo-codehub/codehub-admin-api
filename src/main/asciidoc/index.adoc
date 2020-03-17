@@ -5,20 +5,17 @@
 = ITS CodeHub
 
 == Admin API
-`version: 2.5.0`
+`version: 2.6.0`
 
 The Admin API of CodeHub has the function to administer the metadata information for the CodeHub Ingestion system. The API connect to an https://www.elastic.co/products/enterprise-search[ElasticSearch] storage system
 
 === Change Log
 Changes related to the previous version.
 
-`Previous version: 2.0.0`
+`Previous version: 2.5.0`
 
-* Change repository structure to add **categories** under **codehubData** structure.
-* Add end-point for Configurations/Categories to manages operations of List, Add, Update, Delete Categories.
-* New structure **CHConfiguration** was added.
-
-
+* Changes to support Popular Categories.
+* New REST end-point added "...api/v1/images/categories" to retrieve the list of available images for the categories.
 
 
 == Header token validation
@@ -313,3 +310,18 @@ include::{snippets}/api/v1/configurations/categories/delete-ok/curl-request.adoc
 
 ===== Success
 include::{snippets}/api/v1/configurations/categories/delete-ok/http-response.adoc[]
+
+=== Get Available Category Images
+List the available category images.
+
+==== Request
+include::{snippets}/api/v1/images/categories/data/http-request.adoc[]
+
+===== cURL Sample
+include::{snippets}/api/v1/images/categories/data/curl-request.adoc[]
+
+
+==== Response
+
+===== Success
+include::{snippets}/api/v1/images/categories/data/http-response.adoc[]

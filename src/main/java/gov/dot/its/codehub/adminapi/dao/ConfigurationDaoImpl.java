@@ -1,6 +1,7 @@
 package gov.dot.its.codehub.adminapi.dao;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -31,6 +33,12 @@ public class ConfigurationDaoImpl implements ConfigurationDao {
 
 	@Value("${codehub.admin.api.configurations.default}")
 	private String configurationId;
+
+	@Value("${codehub.admin.api.configurations.images.list}")
+	private String imagesList;
+
+	@Value("${codehub.admin.api.configurations.images.path}")
+	private String imagesPath;
 
 	@Autowired
 	private ObjectMapper objectMapper;
@@ -173,6 +181,18 @@ public class ConfigurationDaoImpl implements ConfigurationDao {
 		restHighLevelClient.update(updateRequest, RequestOptions.DEFAULT);
 
 		return true;
+	}
+
+	@Override
+	public List<String> getCategoryImages() throws IOException {
+		ObjectMapper mapper = new ObjectMapper();
+
+		TypeReference<List<String>> typeRef= new TypeReference<List<String>>() {};
+		List<String> images = mapper.readValue(new URL(this.imagesList), typeRef);
+		for(int i=0; i<images.size(); i++) {
+			images.set(i, String.format("%s/%s", this.imagesPath, images.get(i)));
+		}
+		return images;
 	}
 
 }

@@ -22,4 +22,6 @@ public interface ConfigurationService {
 
 	ApiResponse<CHCategory> deleteCategory(HttpServletRequest request, String id);
 
+	ApiResponse<List<String>> categoryImages(HttpServletRequest request);
+
 }

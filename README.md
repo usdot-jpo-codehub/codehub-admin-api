@@ -1,16 +1,14 @@
 # codehub-admin-api
 CodeHub Admin API
-> Version: 2.5.0
+> Version: 2.6.0
 
 The Admin API of CodeHub has the function to administer the metadata information (documents) for the CodeHub Ingestion system. The API connect to an ElasticSearch storage system. The API will do actions on the Repos and Projects indexes. 
 
 ## Change Log
 Changes related to the previous version.
 
-> Previous Version: 2.0.0
-- Change repository structure to add **categories** under **codehubData** structure.
-- Add end-point for Configurations/Categories to manages operations of List, Add, Update, Delete Categories.
-- New structure **CHConfiguration** was added.
+> Previous Version: 2.5.0
+- Changes to support Popular Categories.
 
 ## Usage
 Once the application is running on a configured port the API uses the standard REST verbs to manipulate the data.
@@ -348,6 +346,8 @@ The API requires the following environment variables
 |codehub.admin.api.origins|optional|*|Whitelist clients to avoid CORS.|
 |server.servlet.context-path|optional|/api|Set the DataHub Web API context path|
 |server.port|optional|3007|Sets the DataHub Web API listening port|
+|codehub.admin.api.configurations.images.list|optional|http://d66sfbdx0p5w.cloudfront.net/images-category.json|URL to the file that contains the JSON array of image file names|
+|codehub.admin.api.configurations.images.path|optional|http://d66sfbdx0p5w.cloudfront.net|Base image path name|
 
 
 ## Installation
