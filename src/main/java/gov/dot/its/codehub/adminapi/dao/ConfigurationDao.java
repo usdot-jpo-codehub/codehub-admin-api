@@ -20,4 +20,6 @@ public interface ConfigurationDao {
 
 	Boolean deleteCategoryById(String id) throws IOException;
 
+	List<String> getCategoryImages() throws IOException;
+
 }

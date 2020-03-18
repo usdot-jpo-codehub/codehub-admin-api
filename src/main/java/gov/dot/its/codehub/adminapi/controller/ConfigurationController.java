@@ -75,4 +75,12 @@ public class ConfigurationController {
 
 		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
 	}
+
+	@GetMapping(value="/v1/images/categories", headers="Accept=application/json", produces="application/json")
+	public ResponseEntity<ApiResponse<List<String>>> categoryImages(HttpServletRequest request) {
+
+		ApiResponse<List<String>> apiResponse = configurationService.categoryImages(request);
+
+		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+	}
 }
