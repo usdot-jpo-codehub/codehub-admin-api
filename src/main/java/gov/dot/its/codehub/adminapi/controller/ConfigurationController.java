@@ -20,6 +20,7 @@ import gov.dot.its.codehub.adminapi.business.ConfigurationService;
 import gov.dot.its.codehub.adminapi.model.ApiResponse;
 import gov.dot.its.codehub.adminapi.model.CHCategory;
 import gov.dot.its.codehub.adminapi.model.CHConfiguration;
+import gov.dot.its.codehub.adminapi.model.CHEngagementPopup;
 
 @CrossOrigin(maxAge = 3600)
 @RestController
@@ -80,6 +81,38 @@ public class ConfigurationController {
 	public ResponseEntity<ApiResponse<List<String>>> categoryImages(HttpServletRequest request) {
 
 		ApiResponse<List<String>> apiResponse = configurationService.categoryImages(request);
+
+		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+	}
+
+	@GetMapping(value="/v1/configurations/engagementpopups", headers="Accept=application/json", produces="application/json")
+	public ResponseEntity<ApiResponse<List<CHEngagementPopup>>> engagementPopups(HttpServletRequest request) {
+
+		ApiResponse<List<CHEngagementPopup>> apiResponse = configurationService.engagementpopups(request);
+
+		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+	}
+
+	@PostMapping(value="/v1/configurations/engagementpopups", headers = "Accept=application/json", produces = "application/json")
+	public ResponseEntity<ApiResponse<CHEngagementPopup>> addCategory(HttpServletRequest request, @RequestBody CHEngagementPopup cdEngagementPopup) {
+
+		ApiResponse<CHEngagementPopup> apiResponse = configurationService.addEngagementPopup(request, cdEngagementPopup);
+
+		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+	}
+
+	@PutMapping(value="/v1/configurations/engagementpopups", headers="Accept=application/json", produces="application/json")
+	public ResponseEntity<ApiResponse<CHEngagementPopup>> updateEngagementPopup(HttpServletRequest request, @RequestBody CHEngagementPopup engagementPopup) {
+
+		ApiResponse<CHEngagementPopup> apiResponse = configurationService.updateEngagementPopup(request, engagementPopup);
+
+		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+	}
+
+	@DeleteMapping(value="/v1/configurations/engagementpopups/{id}", headers="Accept=application/json", produces="application/json")
+	public ResponseEntity<ApiResponse<CHEngagementPopup>> deleteEngagementPopup(HttpServletRequest request, @PathVariable(name = "id") String id) {
+
+		ApiResponse<CHEngagementPopup> apiResponse = configurationService.deleteEngagementPopup(request, id);
 
 		return new ResponseEntity<>(apiResponse, HttpStatus.OK);
 	}

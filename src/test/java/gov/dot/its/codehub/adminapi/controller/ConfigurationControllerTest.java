@@ -42,6 +42,7 @@ import gov.dot.its.codehub.adminapi.business.ConfigurationService;
 import gov.dot.its.codehub.adminapi.model.ApiResponse;
 import gov.dot.its.codehub.adminapi.model.CHCategory;
 import gov.dot.its.codehub.adminapi.model.CHConfiguration;
+import gov.dot.its.codehub.adminapi.model.CHEngagementPopup;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(ConfigurationController.class)
@@ -52,6 +53,7 @@ class ConfigurationControllerTest {
 	private static final String HEADER_HOST = "Host";
 	private static final String HEADER_CONTENT_LENGTH = "Content-Length";
 	private static final String URL_CATEGORIES_TEMPLATE = "%s/v1/configurations/categories";
+	private static final String URL_ENGAGEMENTPOPUP_TEMPLATE = "%s/v1/configurations/engagementpopups";
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -95,8 +97,6 @@ class ConfigurationControllerTest {
 		assertTrue(responseApi.getErrors() == null);
 		assertTrue(responseApi.getMessages() == null);
 	}
-
-
 
 	@Test
 	void testCategories() throws Exception { //NOSONAR
@@ -311,6 +311,166 @@ class ConfigurationControllerTest {
 		assertTrue(responseApi.getResult() != null);
 	}
 
+	@Test
+	void testEngagementPopups() throws Exception { //NOSONAR
+		MockHttpServletRequest request = new MockHttpServletRequest();
+		request.setMethod("GET");
+
+		CHConfiguration configuration = this.getFakeConfiguration();
+
+		ApiResponse<List<CHEngagementPopup>> apiResponse = new ApiResponse<>();
+		apiResponse.setResponse(HttpStatus.OK, configuration.getEngagementPopups(), null, null, request);
+
+		when(configurationService.engagementpopups(any(HttpServletRequest.class))).thenReturn(apiResponse);
+
+		ResultActions resultActions = this.prepareResultActions(URL_ENGAGEMENTPOPUP_TEMPLATE,"api/v1/configurations/engagementpopups/data");
+
+		MvcResult result = resultActions.andReturn();
+		String objString = result.getResponse().getContentAsString();
+
+		TypeReference<ApiResponse<List<CHEngagementPopup>>> valueType = new TypeReference<ApiResponse<List<CHEngagementPopup>>>(){};
+		ApiResponse<List<CHEngagementPopup>> responseApi = objectMapper.readValue(objString, valueType);
+
+		assertTrue(responseApi.getResult() != null);
+		assertTrue(responseApi.getErrors() == null);
+		assertTrue(responseApi.getMessages() == null);
+		assertEquals(HttpStatus.OK.value(), responseApi.getCode());
+	}
+
+	@Test
+	void testAddEngagementPopup() throws Exception { //NOSONAR
+		MockHttpServletRequest request = new MockHttpServletRequest();
+		request.setMethod("POST");
+
+		CHEngagementPopup engagementPopup = this.getFakeEngagementPopup();
+
+		ApiResponse<CHEngagementPopup> apiResponse = new ApiResponse<>();
+		apiResponse.setResponse(HttpStatus.OK, engagementPopup, null, null, request);
+
+		when(configurationService.addEngagementPopup(any(HttpServletRequest.class),any(CHEngagementPopup.class))).thenReturn(apiResponse);
+
+		String engagementPopupStr = objectMapper.writeValueAsString(engagementPopup);
+
+		ResultActions resultActions = this.mockMvc.perform(
+				post(String.format(URL_ENGAGEMENTPOPUP_TEMPLATE,env.getProperty(SERVER_SERVLET_CONTEXT_PATH)))
+				.contentType(MediaType.APPLICATION_JSON)
+				.contextPath(String.format("%s", env.getProperty(SERVER_SERVLET_CONTEXT_PATH)))
+				.content(engagementPopupStr)
+				)
+				.andExpect(status().isOk())
+				.andDo(document("api/v1/configurations/engagementpopups/add-ok",
+						Preprocessors.preprocessRequest(
+								Preprocessors.prettyPrint(),
+								Preprocessors.removeHeaders(HEADER_HOST, HEADER_CONTENT_LENGTH)
+								),
+						Preprocessors.preprocessResponse(
+								Preprocessors.prettyPrint(),
+								Preprocessors.removeHeaders(HEADER_HOST, HEADER_CONTENT_LENGTH)
+								)
+
+						));
+
+		MvcResult result = resultActions.andReturn();
+		String objString = result.getResponse().getContentAsString();
+
+		TypeReference<ApiResponse<CHEngagementPopup>> valueType = new TypeReference<ApiResponse<CHEngagementPopup>>(){};
+		ApiResponse<CHEngagementPopup> responseApi = objectMapper.readValue(objString, valueType);
+
+		assertTrue(responseApi.getMessages() == null);
+		assertTrue(responseApi.getErrors() == null);
+		assertEquals(HttpStatus.OK.value(), responseApi.getCode());
+		assertTrue(responseApi.getResult() != null);
+	}
+
+	@Test
+	void testUpdateEngagementPopup() throws Exception { //NOSONAR
+		MockHttpServletRequest request = new MockHttpServletRequest();
+		request.setMethod("PUT");
+
+		CHEngagementPopup engagementPopup = this.getFakeEngagementPopup();
+
+		ApiResponse<CHEngagementPopup> apiResponse = new ApiResponse<>();
+		apiResponse.setResponse(HttpStatus.OK, engagementPopup, null, null, request);
+
+		when(configurationService.updateEngagementPopup(any(HttpServletRequest.class),any(CHEngagementPopup.class))).thenReturn(apiResponse);
+
+		String engagementPopupStr = objectMapper.writeValueAsString(engagementPopup);
+
+		ResultActions resultActions = this.mockMvc.perform(
+				put(String.format(URL_ENGAGEMENTPOPUP_TEMPLATE,env.getProperty(SERVER_SERVLET_CONTEXT_PATH)))
+				.contentType(MediaType.APPLICATION_JSON)
+				.contextPath(String.format("%s", env.getProperty(SERVER_SERVLET_CONTEXT_PATH)))
+				.content(engagementPopupStr)
+				)
+				.andExpect(status().isOk())
+				.andDo(document("api/v1/configurations/engagementpopups/update-ok",
+						Preprocessors.preprocessRequest(
+								Preprocessors.prettyPrint(),
+								Preprocessors.removeHeaders(HEADER_HOST, HEADER_CONTENT_LENGTH)
+								),
+						Preprocessors.preprocessResponse(
+								Preprocessors.prettyPrint(),
+								Preprocessors.removeHeaders(HEADER_HOST, HEADER_CONTENT_LENGTH)
+								)
+
+						));
+
+		MvcResult result = resultActions.andReturn();
+		String objString = result.getResponse().getContentAsString();
+
+		TypeReference<ApiResponse<CHEngagementPopup>> valueType = new TypeReference<ApiResponse<CHEngagementPopup>>(){};
+		ApiResponse<CHEngagementPopup> responseApi = objectMapper.readValue(objString, valueType);
+
+		assertTrue(responseApi.getMessages() == null);
+		assertTrue(responseApi.getResult() != null);
+		assertEquals(HttpStatus.OK.value(), responseApi.getCode());
+		assertTrue(responseApi.getErrors() == null);
+	}
+
+	@Test
+	void testDeleteEngagementPopup() throws Exception { //NOSONAR
+		MockHttpServletRequest request = new MockHttpServletRequest();
+		request.setMethod("DELETE");
+
+		CHEngagementPopup engagementPopup = this.getFakeEngagementPopup();
+
+		ApiResponse<CHEngagementPopup> apiResponse = new ApiResponse<>();
+		apiResponse.setResponse(HttpStatus.OK, engagementPopup, null, null, request);
+
+		when(configurationService.deleteEngagementPopup(any(HttpServletRequest.class), any(String.class))).thenReturn(apiResponse);
+
+		ResultActions resultActions = this.mockMvc.perform(
+				delete(String.format(URL_ENGAGEMENTPOPUP_TEMPLATE+"/%s",env.getProperty(SERVER_SERVLET_CONTEXT_PATH),engagementPopup.getId()))
+				.contentType(MediaType.APPLICATION_JSON)
+				.contextPath(String.format("%s", env.getProperty(SERVER_SERVLET_CONTEXT_PATH)))
+				)
+				.andExpect(status().isOk())
+				.andDo(document("api/v1/configurations/engagementpopups/delete-ok",
+						Preprocessors.preprocessRequest(
+								Preprocessors.prettyPrint(),
+								Preprocessors.removeHeaders(HEADER_HOST, HEADER_CONTENT_LENGTH)
+								),
+						Preprocessors.preprocessResponse(
+								Preprocessors.prettyPrint(),
+								Preprocessors.removeHeaders(HEADER_HOST, HEADER_CONTENT_LENGTH)
+								)
+
+						));
+
+		MvcResult result = resultActions.andReturn();
+		String objString = result.getResponse().getContentAsString();
+
+		TypeReference<ApiResponse<CHEngagementPopup>> valueType = new TypeReference<ApiResponse<CHEngagementPopup>>(){};
+		ApiResponse<CHEngagementPopup> responseApi = objectMapper.readValue(objString, valueType);
+
+		assertTrue(responseApi.getResult() != null);
+		assertTrue(responseApi.getErrors() == null);
+		assertTrue(responseApi.getResult() instanceof CHEngagementPopup);
+		assertEquals(HttpStatus.OK.value(), responseApi.getCode());
+		assertTrue(responseApi.getMessages() == null);
+	}
+
+
 	private ResultActions prepareResultActions(String testUrlTemplate, String documentPath) throws Exception { //NOSONAR
 		return this.mockMvc.perform(
 				get(String.format(testUrlTemplate, env.getProperty(SERVER_SERVLET_CONTEXT_PATH)))
@@ -342,6 +502,14 @@ class ConfigurationControllerTest {
 
 		configuration.setCategories(categories);
 
+		List<CHEngagementPopup> engagementPopups = new ArrayList<>();
+		for(int i=0; i<2; i++) {
+			CHEngagementPopup engagementPopup = this.getFakeEngagementPopup();
+			engagementPopups.add(engagementPopup);
+		}
+
+		configuration.setEngagementPopups(engagementPopups);
+
 		return configuration;
 	}
 
@@ -358,5 +526,17 @@ class ConfigurationControllerTest {
 		category.setPopular(true);
 
 		return category;
+	}
+
+	private CHEngagementPopup getFakeEngagementPopup() {
+		int id = this.random.nextInt(100);
+		CHEngagementPopup engagementPopup = new CHEngagementPopup();
+		engagementPopup.setId(UUID.randomUUID().toString());
+		engagementPopup.setActive(false);
+		engagementPopup.setContent(String.format("<h1>This is fake %s</h1>",id));
+		engagementPopup.setDescription(String.format("Description %s", id));
+		engagementPopup.setLastModified(new Date());
+		engagementPopup.setName(String.format("EngagementPopup-%s", id));
+		return engagementPopup;
 	}
 }
