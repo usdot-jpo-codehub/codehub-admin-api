@@ -1,14 +1,14 @@
 # codehub-admin-api
 CodeHub Admin API
-> Version: 2.6.0
+> Version: 2.7.0
 
 The Admin API of CodeHub has the function to administer the metadata information (documents) for the CodeHub Ingestion system. The API connect to an ElasticSearch storage system. The API will do actions on the Repos and Projects indexes. 
 
 ## Change Log
 Changes related to the previous version.
 
-> Previous Version: 2.5.0
-- Changes to support Popular Categories.
+> Previous Version: 2.6.0
+- Changes to support Engagement PopUps.
 
 ## Usage
 Once the application is running on a configured port the API uses the standard REST verbs to manipulate the data.
@@ -157,33 +157,57 @@ HTTP/1.1 200 OK
 Content-Type: application/json
 
 {
-  "timestamp" : "2020-02-18T16:46:45Z",
+  "timestamp" : "2020-03-23T21:23:38Z",
   "status" : "OK",
   "code" : 200,
   "path" : "http://localhost",
   "verb" : "GET",
-  "traceid" : "20200218164645217",
+  "traceid" : "20200323212338382",
   "result" : {
     "id" : "default-configuration",
     "name" : "default-configuration",
     "categories" : [ {
-      "id" : "67b99360-8011-474e-9c30-bd230f914ae2",
-      "name" : "Category-22",
-      "description" : "Description-22",
-      "lastModified" : 1582044405217,
+      "id" : "f332069f-1a59-4da0-b1bd-852407722ea9",
+      "name" : "Category-84",
+      "description" : "Description-84",
+      "lastModified" : 1584998618382,
+      "orderPopular" : 1,
+      "imageFileName" : "http://path.to.the.image/image1.png",
+      "isPopular" : true,
       "isEnabled" : true
     }, {
-      "id" : "36bd22e6-9680-47a0-9398-f26cda7f6e37",
-      "name" : "Category-93",
-      "description" : "Description-93",
-      "lastModified" : 1582044405217,
+      "id" : "47cd40b1-fcb2-4db5-a8af-2358f21594ca",
+      "name" : "Category-67",
+      "description" : "Description-67",
+      "lastModified" : 1584998618382,
+      "orderPopular" : 1,
+      "imageFileName" : "http://path.to.the.image/image1.png",
+      "isPopular" : true,
       "isEnabled" : true
     }, {
-      "id" : "3789b955-1247-4581-b326-a5687418bdd0",
-      "name" : "Category-21",
-      "description" : "Description-21",
-      "lastModified" : 1582044405217,
+      "id" : "eb0ab51b-f667-478a-96ad-295b2036f0de",
+      "name" : "Category-54",
+      "description" : "Description-54",
+      "lastModified" : 1584998618382,
+      "orderPopular" : 1,
+      "imageFileName" : "http://path.to.the.image/image1.png",
+      "isPopular" : true,
       "isEnabled" : true
+    } ],
+    "engagementPopups" : [ {
+      "id" : "87ce0e95-37e1-412c-8f38-1d90ffdef64e",
+      "name" : "EngagementPopup-41",
+      "description" : "Description 41",
+      "lastModified" : 1584998618382,
+      "content" : "<h1>This is fake 41</h1>",
+      "isActive" : false
+    }, {
+      "id" : "bb62520f-19cc-439e-a2fb-f1dd46789434",
+      "name" : "EngagementPopup-77",
+      "description" : "Description 77",
+      "lastModified" : 1584998618382,
+      "content" : "<h1>This is fake 77</h1>",
+      "isActive" : false
     } ]
   }
 }
@@ -328,6 +352,146 @@ Content-Type: application/json
 }
 ```
 
+### List Engagement PopUps
+
+ - Method: GET
+ - URL: http://[host:port]/api/v1/configurations/engagementpopups
+ - Response
+```json
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "timestamp" : "2020-03-23T21:23:38Z",
+  "status" : "OK",
+  "code" : 200,
+  "path" : "http://localhost",
+  "verb" : "GET",
+  "traceid" : "20200323212338472",
+  "result" : [ {
+    "id" : "6c47741d-c67e-4be1-9e22-f4c556a4ed3e",
+    "name" : "EngagementPopup-99",
+    "description" : "Description 99",
+    "lastModified" : 1584998618472,
+    "content" : "<h1>This is fake 99</h1>",
+    "isActive" : false
+  }, {
+    "id" : "dafddf46-19df-48c3-98be-e248d14ce16a",
+    "name" : "EngagementPopup-77",
+    "description" : "Description 77",
+    "lastModified" : 1584998618472,
+    "content" : "<h1>This is fake 77</h1>",
+    "isActive" : false
+  } ]
+}
+```
+
+### Add Engagement PopUp
+
+ - Method: POST
+ - URL: http://[host:port]/api/v1/configurations/engagementpopups
+ - Content-Type: application/json
+ - Payload: CHCategory
+```json
+{
+  "id" : "e0402d89-5b88-484e-ad73-e9147b8928a3",
+  "name" : "EngagementPopup-64",
+  "description" : "Description 64",
+  "lastModified" : "2020-03-23T21:23:38.405+0000",
+  "content" : "<h1>This is fake 64</h1>",
+  "isActive" : false
+}
+```
+ - Response
+```json
+HTTP/1.1 200 OK
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json
+
+{
+  "timestamp" : "2020-03-23T21:23:38Z",
+  "status" : "OK",
+  "code" : 200,
+  "path" : "http://localhost",
+  "verb" : "POST",
+  "traceid" : "20200323212338405",
+  "result" : {
+    "id" : "e0402d89-5b88-484e-ad73-e9147b8928a3",
+    "name" : "EngagementPopup-64",
+    "description" : "Description 64",
+    "lastModified" : 1584998618405,
+    "content" : "<h1>This is fake 64</h1>",
+    "isActive" : false
+  }
+}
+```
+
+### Update Engagement PopUp
+
+ - Method: PUT
+ - URL: http://[host:port]/api/v1/configurations/engagementpopups
+ - Content-Type: application/json
+ - Payload: CHCategory
+```json
+{
+  "id" : "acc740a8-b2d3-48ac-800f-92569745d90c",
+  "name" : "EngagementPopup-46",
+  "description" : "Description 46",
+  "lastModified" : "2020-03-23T21:23:38.127+0000",
+  "content" : "<h1>This is fake 46</h1>",
+  "isActive" : false
+}
+```
+ - Response
+```json
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "timestamp" : "2020-03-23T21:23:38Z",
+  "status" : "OK",
+  "code" : 200,
+  "path" : "http://localhost",
+  "verb" : "PUT",
+  "traceid" : "20200323212338128",
+  "result" : {
+    "id" : "acc740a8-b2d3-48ac-800f-92569745d90c",
+    "name" : "EngagementPopup-46",
+    "description" : "Description 46",
+    "lastModified" : 1584998618127,
+    "content" : "<h1>This is fake 46</h1>",
+    "isActive" : false
+  }
+}
+```
+
+### Delete Engagement PopUp
+
+ - Method: DELETE
+ - URL: http://[host:port]/api/v1/configurations/engagementpopups/{:ID}
+ - Content-Type: application/json
+ - Response
+```json
+{
+  "timestamp" : "2020-03-23T21:23:38Z",
+  "status" : "OK",
+  "code" : 200,
+  "path" : "http://localhost",
+  "verb" : "DELETE",
+  "traceid" : "20200323212338546",
+  "result" : {
+    "id" : "f57461dd-20fc-4858-9465-3290f98610ed",
+    "name" : "EngagementPopup-65",
+    "description" : "Description 65",
+    "lastModified" : 1584998618546,
+    "content" : "<h1>This is fake 65</h1>",
+    "isActive" : false
+  }
+}
+```
+
 ## Configuration
 The API requires the following environment variables
 
@@ -354,7 +518,7 @@ The API requires the following environment variables
 The API is a Java application and can be executed updating the values of the following command template.
 
 ```bash
-sh -c java -Djava.security.egd=file:/dev/./urandom -jar /codehub-admin-api-2.5.0.jar"
+sh -c java -Djava.security.egd=file:/dev/./urandom -jar /codehub-admin-api-2.7.0.jar"
 ```
 It is important to setup the environment variables before to execute the application.
 
@@ -380,7 +544,7 @@ The API documentation is embedded in the application as static html file, this c
 ## Docker Support
 A [Docker](https://www.docker.com/) image can be build with the next command line.
 ```bash
-  docker build -t codehub-admin-api:2.5.0 .
+  docker build -t codehub-admin-api:latest .
 ```
 
 The following command with the correct values for the environment variable will start a Docker container.
@@ -391,11 +555,15 @@ docker run -p 3007:3007 --rm \
 -e "codehub.admin.api.es.host=[HOST]" \
 -e "codehub.admin.api.es.port=[PORT]" \
 -e "codehub.admin.api.es.scheme=[SCHEME]" \
--t -i codehub-admin-api:2.5.0
+-t -i codehub-admin-api:latest
 ```
 
 
 ## Release History
+* 2.7.0
+  * Add support for manage Engagement Popups.
+* 2.6.0
+  * Add support for handling Popular Categories.
 * 2.5.0
   * Change repository structure to add **categories** under **codehubData** structure.
   * Add end-point for Configurations/Categories to manages operations of List, Add, Update, Delete Categories.
