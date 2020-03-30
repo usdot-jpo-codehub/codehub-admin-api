@@ -5,6 +5,7 @@ import java.util.List;
 
 import gov.dot.its.codehub.adminapi.model.CHCategory;
 import gov.dot.its.codehub.adminapi.model.CHConfiguration;
+import gov.dot.its.codehub.adminapi.model.CHEngagementPopup;
 
 public interface ConfigurationDao {
 
@@ -21,5 +22,13 @@ public interface ConfigurationDao {
 	Boolean deleteCategoryById(String id) throws IOException;
 
 	List<String> getCategoryImages() throws IOException;
+
+	List<CHEngagementPopup> getEngagementPopups() throws IOException;
+
+	String updateEngagementPopup(CHEngagementPopup engagementPopup) throws IOException;
+
+	String addEngagementPopup(CHEngagementPopup cdEngagementPopup) throws IOException;
+
+	Boolean removeEngagementPopup(String id) throws IOException;
 
 }
