@@ -1,21 +1,20 @@
 :toc: left
 :toclevels: 4
 
-
 = ITS CodeHub
 
 == Admin API
-`version: 2.6.0`
+`version: 2.7.0`
 
 The Admin API of CodeHub has the function to administer the metadata information for the CodeHub Ingestion system. The API connect to an https://www.elastic.co/products/enterprise-search[ElasticSearch] storage system
 
 === Change Log
 Changes related to the previous version.
 
-`Previous version: 2.5.0`
+`Previous version: 2.6.0`
 
-* Changes to support Popular Categories.
-* New REST end-point added "...api/v1/images/categories" to retrieve the list of available images for the categories.
+* Changes to support Engagement Popups.
+* New REST end-point added "...api/v1/images/engagementpopups" to manage operations with Engagement Popups.
 
 
 == Header token validation
@@ -98,6 +97,7 @@ The repository information is presented through an structure (CHRepository) that
 |id|String|Configuration ID
 |name|String|Configuration Name.
 |categories|List<**CHCategory**>|List of categories.
+|engagementPopups|List<**CHEngagementPopup**>|List of engagement popups.
 |===
 
 *CHCategory*
@@ -112,6 +112,18 @@ The repository information is presented through an structure (CHRepository) that
 |lastModified|Date|Last Date when the category was modified.
 |===
 
+*CHEngagementPopup*
+[options="header",cols="1,1,2"]
+|===
+|Name   |Type   |Description
+//-------------
+|id|String|UUID for the Engagement Popup (dynamically generated)
+|name|String|Engagement Popup Name.
+|description|String|Description for the Engagement Popup.
+|isActive|boolean|Flag that defines which of the Engagement Popup is active (just one for all the collection).
+|lastModified|Date|Last Date when the Engagement Popup was modified.
+|content|String|HTML source code that will be displayed in the Engagement Popup.
+|===
 
 === List Repositories
 Gets a list of all the Repositories
@@ -325,3 +337,64 @@ include::{snippets}/api/v1/images/categories/data/curl-request.adoc[]
 
 ===== Success
 include::{snippets}/api/v1/images/categories/data/http-response.adoc[]
+
+
+=== Engagement Popups
+List the available Engagement Popups.
+
+==== Request
+include::{snippets}/api/v1/configurations/engagementpopups/data/http-request.adoc[]
+
+===== cURL Sample
+include::{snippets}/api/v1/configurations/engagementpopups/data/curl-request.adoc[]
+
+
+==== Response
+
+===== Success
+include::{snippets}/api/v1/configurations/engagementpopups/data/http-response.adoc[]
+
+=== Add Engagement Popup
+Add new Engagement Popup.
+
+==== Request
+include::{snippets}/api/v1/configurations/engagementpopups/add-ok/http-request.adoc[]
+
+===== cURL Sample
+include::{snippets}/api/v1/configurations/engagementpopups/add-ok/curl-request.adoc[]
+
+
+==== Response
+
+===== Success
+include::{snippets}/api/v1/configurations/engagementpopups/add-ok/http-response.adoc[]
+
+=== Update Engagement Popup
+Update existing Engagement Popup.
+
+==== Request
+include::{snippets}/api/v1/configurations/engagementpopups/update-ok/http-request.adoc[]
+
+===== cURL Sample
+include::{snippets}/api/v1/configurations/engagementpopups/update-ok/curl-request.adoc[]
+
+
+==== Response
+
+===== Success
+include::{snippets}/api/v1/configurations/engagementpopups/update-ok/http-response.adoc[]
+
+=== Delete Engagement Popup
+Delete existing Engagement Popup.
+
+==== Request
+include::{snippets}/api/v1/configurations/engagementpopups/delete-ok/http-request.adoc[]
+
+===== cURL Sample
+include::{snippets}/api/v1/configurations/engagementpopups/delete-ok/curl-request.adoc[]
+
+
+==== Response
+
+===== Success
+include::{snippets}/api/v1/configurations/engagementpopups/delete-ok/http-response.adoc[]

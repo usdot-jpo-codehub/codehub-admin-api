@@ -22,6 +22,7 @@ import gov.dot.its.codehub.adminapi.model.ApiMessage;
 import gov.dot.its.codehub.adminapi.model.ApiResponse;
 import gov.dot.its.codehub.adminapi.model.CHCategory;
 import gov.dot.its.codehub.adminapi.model.CHConfiguration;
+import gov.dot.its.codehub.adminapi.model.CHEngagementPopup;
 import gov.dot.its.codehub.adminapi.utils.ApiUtils;
 import gov.dot.its.codehub.adminapi.utils.HeaderUtils;
 
@@ -32,7 +33,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
 	private static final String CHTOKEN_KEY = "CHTOKEN";
 	private static final String MESSAGE_INVALID_TOKEN = "Invalid token";
-	private static final String MESSAGE_TEMPLATE = "%s : %s ";
+	private static final String MESSAGE_TEMPLATE = "{} : {} ";
 
 	@Autowired
 	private ConfigurationDao configurationDao;
@@ -58,7 +59,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 		List<ApiError> errors = new ArrayList<>();
 
 		if (!headerUtils.validateToken(request.getHeader(CHTOKEN_KEY))) {
-			logger.warn(String.format(MESSAGE_TEMPLATE, RESPONSE_MSG, MESSAGE_INVALID_TOKEN));
+			logger.warn(MESSAGE_TEMPLATE, RESPONSE_MSG, MESSAGE_INVALID_TOKEN);
 			errors.add(new ApiError(MESSAGE_INVALID_TOKEN));
 			apiResponse.setResponse(HttpStatus.UNAUTHORIZED, null, null, errors, request);
 			return apiResponse;
@@ -70,12 +71,12 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
 			if (configuration != null) {
 				apiResponse.setResponse(HttpStatus.OK, configuration, null, null, request);
-				logger.info(String.format(MESSAGE_TEMPLATE, RESPONSE_MSG,HttpStatus.OK.toString()));
+				logger.info(MESSAGE_TEMPLATE, RESPONSE_MSG,HttpStatus.OK.toString());
 				return apiResponse;
 			}
 
 			apiResponse.setResponse(HttpStatus.NO_CONTENT, null, null, null, request);
-			logger.info(String.format(MESSAGE_TEMPLATE, RESPONSE_MSG, HttpStatus.NO_CONTENT.toString()));
+			logger.info(MESSAGE_TEMPLATE, RESPONSE_MSG, HttpStatus.NO_CONTENT.toString());
 			return apiResponse;
 
 
@@ -93,7 +94,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 		List<ApiError> errors = new ArrayList<>();
 
 		if (!headerUtils.validateToken(request.getHeader(CHTOKEN_KEY))) {
-			logger.warn(String.format(MESSAGE_TEMPLATE, RESPONSE_MSG, MESSAGE_INVALID_TOKEN));
+			logger.warn(MESSAGE_TEMPLATE, RESPONSE_MSG, MESSAGE_INVALID_TOKEN);
 			errors.add(new ApiError(MESSAGE_INVALID_TOKEN));
 			apiResponse.setResponse(HttpStatus.UNAUTHORIZED, null, null, errors, request);
 			return apiResponse;
@@ -105,12 +106,12 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
 			if (categories != null && !categories.isEmpty()) {
 				apiResponse.setResponse(HttpStatus.OK, categories, null, null, request);
-				logger.info(String.format(MESSAGE_TEMPLATE, RESPONSE_MSG,HttpStatus.OK.toString()+" "+categories.size()));
+				logger.info(MESSAGE_TEMPLATE, RESPONSE_MSG,HttpStatus.OK.toString()+" "+categories.size());
 				return apiResponse;
 			}
 
 			apiResponse.setResponse(HttpStatus.NO_CONTENT, null, null, null, request);
-			logger.info(String.format(MESSAGE_TEMPLATE, RESPONSE_MSG, HttpStatus.NO_CONTENT.toString()));
+			logger.info(MESSAGE_TEMPLATE, RESPONSE_MSG, HttpStatus.NO_CONTENT.toString());
 			return apiResponse;
 
 
@@ -129,7 +130,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 		List<ApiMessage> messages = new ArrayList<>();
 
 		if (!headerUtils.validateToken(request.getHeader(CHTOKEN_KEY))) {
-			logger.warn(String.format(MESSAGE_TEMPLATE, RESPONSE_MSG, MESSAGE_INVALID_TOKEN));
+			logger.warn(MESSAGE_TEMPLATE, RESPONSE_MSG, MESSAGE_INVALID_TOKEN);
 			errors.add(new ApiError(MESSAGE_INVALID_TOKEN));
 			apiResponse.setResponse(HttpStatus.UNAUTHORIZED, null, null, errors, request);
 			return apiResponse;
@@ -143,12 +144,12 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 			if (result != null) {
 				messages.add(new ApiMessage(result));
 				apiResponse.setResponse(HttpStatus.OK, chCategory, messages, null, request);
-				logger.info(String.format(MESSAGE_TEMPLATE, RESPONSE_MSG,HttpStatus.OK.toString()+" "+result));
+				logger.info(MESSAGE_TEMPLATE, RESPONSE_MSG,HttpStatus.OK.toString()+" "+result);
 				return apiResponse;
 			}
 
 			apiResponse.setResponse(HttpStatus.INTERNAL_SERVER_ERROR, null, null, null, request);
-			logger.info(String.format(MESSAGE_TEMPLATE, RESPONSE_MSG, HttpStatus.INTERNAL_SERVER_ERROR.toString()));
+			logger.info(MESSAGE_TEMPLATE, RESPONSE_MSG, HttpStatus.INTERNAL_SERVER_ERROR.toString());
 			return apiResponse;
 
 
@@ -169,7 +170,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 		if (!headerUtils.validateToken(request.getHeader(CHTOKEN_KEY))) {
 			errors.add(new ApiError(MESSAGE_INVALID_TOKEN));
 			apiResponse.setResponse(HttpStatus.UNAUTHORIZED, null, null, errors, request);
-			logger.warn(String.format(MESSAGE_TEMPLATE, RESPONSE_MSG, MESSAGE_INVALID_TOKEN));
+			logger.warn(MESSAGE_TEMPLATE, RESPONSE_MSG, MESSAGE_INVALID_TOKEN);
 			return apiResponse;
 		}
 
@@ -179,12 +180,12 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
 			if (result != null) {
 				messages.add(new ApiMessage(result));
-				logger.info(String.format(MESSAGE_TEMPLATE, RESPONSE_MSG,HttpStatus.OK.toString()+" "+result));
+				logger.info(MESSAGE_TEMPLATE, RESPONSE_MSG,HttpStatus.OK.toString()+" "+result);
 				apiResponse.setResponse(HttpStatus.OK, chCategory, messages, null, request);
 				return apiResponse;
 			}
 
-			logger.info(String.format(MESSAGE_TEMPLATE, RESPONSE_MSG, HttpStatus.INTERNAL_SERVER_ERROR.toString()));
+			logger.info(MESSAGE_TEMPLATE, RESPONSE_MSG, HttpStatus.INTERNAL_SERVER_ERROR.toString());
 			apiResponse.setResponse(HttpStatus.INTERNAL_SERVER_ERROR, null, null, null, request);
 			return apiResponse;
 
@@ -205,7 +206,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
 		if (!headerUtils.validateToken(request.getHeader(CHTOKEN_KEY))) {
 			errors.add(new ApiError(MESSAGE_INVALID_TOKEN));
-			logger.warn(String.format(MESSAGE_TEMPLATE, RESPONSE_MSG, MESSAGE_INVALID_TOKEN));
+			logger.warn(MESSAGE_TEMPLATE, RESPONSE_MSG, MESSAGE_INVALID_TOKEN);
 			apiResponse.setResponse(HttpStatus.UNAUTHORIZED, null, null, errors, request);
 			return apiResponse;
 		}
@@ -216,12 +217,12 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
 			if (category != null) {
 				apiResponse.setResponse(HttpStatus.OK, category, messages, null, request);
-				logger.info(String.format(MESSAGE_TEMPLATE, RESPONSE_MSG,HttpStatus.OK.toString()));
+				logger.info(MESSAGE_TEMPLATE, RESPONSE_MSG,HttpStatus.OK.toString());
 				return apiResponse;
 			}
 
 			apiResponse.setResponse(HttpStatus.NOT_FOUND, null, null, null, request);
-			logger.info(String.format(MESSAGE_TEMPLATE, RESPONSE_MSG, HttpStatus.NOT_FOUND.toString()));
+			logger.info(MESSAGE_TEMPLATE, RESPONSE_MSG, HttpStatus.NOT_FOUND.toString());
 			return apiResponse;
 
 
@@ -241,7 +242,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
 		if (!headerUtils.validateToken(request.getHeader(CHTOKEN_KEY))) {
 			errors.add(new ApiError(MESSAGE_INVALID_TOKEN));
-			logger.warn(String.format(MESSAGE_TEMPLATE, RESPONSE_MSG, MESSAGE_INVALID_TOKEN));
+			logger.warn(MESSAGE_TEMPLATE, RESPONSE_MSG, MESSAGE_INVALID_TOKEN);
 			apiResponse.setResponse(HttpStatus.UNAUTHORIZED, null, null, errors, request);
 			return apiResponse;
 		}
@@ -259,12 +260,12 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
 				messages.add(new ApiMessage(id));
 				apiResponse.setResponse(HttpStatus.OK, null, messages, null, request);
-				logger.info(String.format(MESSAGE_TEMPLATE, RESPONSE_MSG,HttpStatus.OK.toString()));
+				logger.info(MESSAGE_TEMPLATE, RESPONSE_MSG,HttpStatus.OK.toString());
 				return apiResponse;
 			}
 
 			apiResponse.setResponse(HttpStatus.NOT_FOUND, null, null, null, request);
-			logger.info(String.format(MESSAGE_TEMPLATE, RESPONSE_MSG, HttpStatus.NOT_FOUND.toString()));
+			logger.info(MESSAGE_TEMPLATE, RESPONSE_MSG, HttpStatus.NOT_FOUND.toString());
 			return apiResponse;
 
 
@@ -282,7 +283,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 		List<ApiError> errors = new ArrayList<>();
 
 		if (!headerUtils.validateToken(request.getHeader(CHTOKEN_KEY))) {
-			logger.warn(String.format(MESSAGE_TEMPLATE, RESPONSE_MSG, MESSAGE_INVALID_TOKEN));
+			logger.warn(MESSAGE_TEMPLATE, RESPONSE_MSG, MESSAGE_INVALID_TOKEN);
 			errors.add(new ApiError(MESSAGE_INVALID_TOKEN));
 			apiResponse.setResponse(HttpStatus.UNAUTHORIZED, null, null, errors, request);
 			return apiResponse;
@@ -294,12 +295,159 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
 			if (images != null && !images.isEmpty()) {
 				apiResponse.setResponse(HttpStatus.OK, images, null, null, request);
-				logger.info(String.format(MESSAGE_TEMPLATE, RESPONSE_MSG,HttpStatus.OK.toString()+" "+images.size()));
+				logger.info(MESSAGE_TEMPLATE, RESPONSE_MSG,HttpStatus.OK.toString()+" "+images.size());
 				return apiResponse;
 			}
 
 			apiResponse.setResponse(HttpStatus.NO_CONTENT, null, null, null, request);
-			logger.info(String.format(MESSAGE_TEMPLATE, RESPONSE_MSG, HttpStatus.NO_CONTENT.toString()));
+			logger.info(MESSAGE_TEMPLATE, RESPONSE_MSG, HttpStatus.NO_CONTENT.toString());
+			return apiResponse;
+
+
+		} catch(ElasticsearchStatusException | IOException e) {
+			return apiResponse.setResponse(HttpStatus.INTERNAL_SERVER_ERROR, null, null, apiUtils.getErrorsFromException(errors, e), request);
+		}
+	}
+
+	@Override
+	public ApiResponse<List<CHEngagementPopup>> engagementpopups(HttpServletRequest request) {
+		logger.info("Request: Engagement Popups");
+		final String RESPONSE_MSG = "Response: GET Engagement Popups. ";
+
+		ApiResponse<List<CHEngagementPopup>> apiResponse = new ApiResponse<>();
+		List<ApiError> errors = new ArrayList<>();
+
+		if (!headerUtils.validateToken(request.getHeader(CHTOKEN_KEY))) {
+			logger.warn(MESSAGE_TEMPLATE, RESPONSE_MSG, MESSAGE_INVALID_TOKEN);
+			errors.add(new ApiError(MESSAGE_INVALID_TOKEN));
+			apiResponse.setResponse(HttpStatus.UNAUTHORIZED, null, null, errors, request);
+			return apiResponse;
+		}
+
+		try {
+
+			List<CHEngagementPopup> engagementPopups = configurationDao.getEngagementPopups();
+
+			if (engagementPopups != null && !engagementPopups.isEmpty()) {
+				apiResponse.setResponse(HttpStatus.OK, engagementPopups, null, null, request);
+				logger.info(MESSAGE_TEMPLATE, RESPONSE_MSG,HttpStatus.OK.toString()+" "+engagementPopups.size());
+				return apiResponse;
+			}
+
+			apiResponse.setResponse(HttpStatus.NO_CONTENT, null, null, null, request);
+			logger.info(MESSAGE_TEMPLATE, RESPONSE_MSG, HttpStatus.NO_CONTENT.toString());
+			return apiResponse;
+
+
+		} catch(ElasticsearchStatusException | IOException e) {
+			return apiResponse.setResponse(HttpStatus.INTERNAL_SERVER_ERROR, null, null, apiUtils.getErrorsFromException(errors, e), request);
+		}
+	}
+
+	@Override
+	public ApiResponse<CHEngagementPopup> updateEngagementPopup(HttpServletRequest request, CHEngagementPopup engagementPopup) {
+		logger.info("Request: Update Engagement Popup");
+		final String RESPONSE_MSG = "Response: PUT Engagement Popup. ";
+
+		List<ApiError> errors = new ArrayList<>();
+		List<ApiMessage> messages = new ArrayList<>();
+		ApiResponse<CHEngagementPopup> apiResponse = new ApiResponse<>();
+
+		if (!headerUtils.validateToken(request.getHeader(CHTOKEN_KEY))) {
+			errors.add(new ApiError(MESSAGE_INVALID_TOKEN));
+			apiResponse.setResponse(HttpStatus.UNAUTHORIZED, null, null, errors, request);
+			logger.warn(MESSAGE_TEMPLATE, RESPONSE_MSG, MESSAGE_INVALID_TOKEN);
+			return apiResponse;
+		}
+
+		try {
+			engagementPopup.setLastModified(apiUtils.getCurrentUtc());
+			String result = configurationDao.updateEngagementPopup(engagementPopup);
+
+			if (result != null) {
+				messages.add(new ApiMessage(result));
+				logger.info(MESSAGE_TEMPLATE, RESPONSE_MSG,HttpStatus.OK.toString()+" "+result);
+				apiResponse.setResponse(HttpStatus.OK, engagementPopup, messages, null, request);
+				return apiResponse;
+			}
+
+			logger.info(MESSAGE_TEMPLATE, RESPONSE_MSG, HttpStatus.INTERNAL_SERVER_ERROR.toString());
+			apiResponse.setResponse(HttpStatus.INTERNAL_SERVER_ERROR, null, null, null, request);
+			return apiResponse;
+
+
+		} catch(ElasticsearchStatusException | IOException e) {
+			return apiResponse.setResponse(HttpStatus.INTERNAL_SERVER_ERROR, null, null, apiUtils.getErrorsFromException(errors, e), request);
+		}
+	}
+
+	@Override
+	public ApiResponse<CHEngagementPopup> addEngagementPopup(HttpServletRequest request, CHEngagementPopup cdEngagementPopup) {
+		logger.info("Request: POST Engagement Popup");
+		final String RESPONSE_MSG = "Response: POST Engagement Popup. ";
+
+		List<ApiError> errors = new ArrayList<>();
+		List<ApiMessage> messages = new ArrayList<>();
+		ApiResponse<CHEngagementPopup> apiResponse = new ApiResponse<>();
+
+		if (!headerUtils.validateToken(request.getHeader(CHTOKEN_KEY))) {
+			errors.add(new ApiError(MESSAGE_INVALID_TOKEN));
+			apiResponse.setResponse(HttpStatus.UNAUTHORIZED, null, null, errors, request);
+			logger.warn(MESSAGE_TEMPLATE, RESPONSE_MSG, MESSAGE_INVALID_TOKEN);
+			return apiResponse;
+		}
+
+		try {
+			cdEngagementPopup.setId(apiUtils.getUUID());
+			cdEngagementPopup.setLastModified(apiUtils.getCurrentUtc());
+			String result = configurationDao.addEngagementPopup(cdEngagementPopup);
+
+			if (result != null) {
+				messages.add(new ApiMessage(result));
+				logger.info(MESSAGE_TEMPLATE, RESPONSE_MSG,HttpStatus.OK.toString()+" "+result);
+				apiResponse.setResponse(HttpStatus.OK, cdEngagementPopup, messages, null, request);
+				return apiResponse;
+			}
+
+			logger.info(MESSAGE_TEMPLATE, RESPONSE_MSG, HttpStatus.INTERNAL_SERVER_ERROR.toString());
+			apiResponse.setResponse(HttpStatus.INTERNAL_SERVER_ERROR, null, null, null, request);
+			return apiResponse;
+
+
+		} catch(ElasticsearchStatusException | IOException e) {
+			return apiResponse.setResponse(HttpStatus.INTERNAL_SERVER_ERROR, null, null, apiUtils.getErrorsFromException(errors, e), request);
+		}
+	}
+
+	@Override
+	public ApiResponse<CHEngagementPopup> deleteEngagementPopup(HttpServletRequest request, String id) {
+		logger.info("Request: DELETE Engagement PopUp");
+		final String RESPONSE_MSG = "Response: DELETE Engagement Popup. ";
+
+		ApiResponse<CHEngagementPopup> apiResponse = new ApiResponse<>();
+		List<ApiMessage> messages = new ArrayList<>();
+		List<ApiError> errors = new ArrayList<>();
+
+		if (!headerUtils.validateToken(request.getHeader(CHTOKEN_KEY))) {
+			errors.add(new ApiError(MESSAGE_INVALID_TOKEN));
+			logger.warn(MESSAGE_TEMPLATE, RESPONSE_MSG, MESSAGE_INVALID_TOKEN);
+			apiResponse.setResponse(HttpStatus.UNAUTHORIZED, null, null, errors, request);
+			return apiResponse;
+		}
+
+		try {
+
+			boolean result = configurationDao.removeEngagementPopup(id);
+
+			if (result) {
+				messages.add(new ApiMessage(id));
+				apiResponse.setResponse(HttpStatus.OK, null, messages, null, request);
+				logger.info(MESSAGE_TEMPLATE, RESPONSE_MSG,HttpStatus.OK.toString());
+				return apiResponse;
+			}
+
+			apiResponse.setResponse(HttpStatus.NOT_FOUND, null, null, null, request);
+			logger.info(MESSAGE_TEMPLATE, RESPONSE_MSG, HttpStatus.NOT_FOUND.toString());
 			return apiResponse;
 
 
