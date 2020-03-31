@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.amazonaws.AmazonServiceException;
+import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.services.cloudfront.AmazonCloudFront;
 import com.amazonaws.services.cloudfront.AmazonCloudFrontClientBuilder;
 import com.amazonaws.services.cloudfront.model.CreateInvalidationRequest;
@@ -23,6 +24,7 @@ import com.amazonaws.services.cloudfront.model.Paths;
 
 import gov.dot.its.codehub.adminapi.model.ApiError;
 import gov.dot.its.codehub.adminapi.model.ApiResponse;
+import gov.dot.its.codehub.adminapi.model.CFInvalidation;
 import gov.dot.its.codehub.adminapi.utils.ApiUtils;
 import gov.dot.its.codehub.adminapi.utils.HeaderUtils;
 
@@ -33,7 +35,7 @@ public class CloudfrontServiceImpl implements CloudfrontService {
 
 	private static final String CHTOKEN_KEY = "CHTOKEN";
 	private static final String MESSAGE_INVALID_TOKEN = "Invalid token";
-	private static final String MESSAGE_TEMPLATE = "%s : %s ";
+	private static final String MESSAGE_TEMPLATE = "{} : {}";
 
 	@Value("${codehub.admin.api.debug}")
 	private boolean debug;
@@ -50,9 +52,11 @@ public class CloudfrontServiceImpl implements CloudfrontService {
 	private final AmazonCloudFront cfclient = AmazonCloudFrontClientBuilder.defaultClient();
 
 	@Override
-	public ApiResponse<String> invalidate(HttpServletRequest request, String path) {
+	public ApiResponse<String> invalidate(HttpServletRequest request, CFInvalidation cfInvalidation) {
+		
+		String path = cfInvalidation.getPath();
 
-		logger.info(String.format(MESSAGE_TEMPLATE, "Request: CloudFront invalidation for path", path));
+		logger.info(MESSAGE_TEMPLATE, "Request: CloudFront invalidation for path", cfInvalidation.getPath());
 		final String RESPONSE_INVALIDATE = String.format(MESSAGE_TEMPLATE, "Response: CloudFront invalidation for path",
 				path);
 
@@ -60,7 +64,7 @@ public class CloudfrontServiceImpl implements CloudfrontService {
 		List<ApiError> errors = new ArrayList<>();
 
 		if (!headerUtils.validateToken(request.getHeader(CHTOKEN_KEY))) {
-			logger.warn(String.format(MESSAGE_TEMPLATE, RESPONSE_INVALIDATE, MESSAGE_INVALID_TOKEN));
+			logger.warn(MESSAGE_TEMPLATE, RESPONSE_INVALIDATE, MESSAGE_INVALID_TOKEN);
 			errors.add(new ApiError(MESSAGE_INVALID_TOKEN));
 			apiResponse.setResponse(HttpStatus.UNAUTHORIZED, null, null, errors, request);
 			return apiResponse;
