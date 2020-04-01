@@ -1,20 +1,21 @@
 :toc: left
 :toclevels: 4
+:snippets: ../../../target/generated-snippets
 
 = ITS CodeHub
 
 == Admin API
-`version: 2.7.0`
+`version: 2.8.0`
 
 The Admin API of CodeHub has the function to administer the metadata information for the CodeHub Ingestion system. The API connect to an https://www.elastic.co/products/enterprise-search[ElasticSearch] storage system
 
 === Change Log
 Changes related to the previous version.
 
-`Previous version: 2.6.0`
+`Previous version: 2.7.0`
 
-* Changes to support Engagement Popups.
-* New REST end-point added "...api/v1/images/engagementpopups" to manage operations with Engagement Popups.
+* Changes to support CloudFront cache invalidation.
+* New REST end-point added "...api/v1/invalidate" to force clear cached objects in CloudFront.
 
 
 == Header token validation
@@ -398,3 +399,27 @@ include::{snippets}/api/v1/configurations/engagementpopups/delete-ok/curl-reques
 
 ===== Success
 include::{snippets}/api/v1/configurations/engagementpopups/delete-ok/http-response.adoc[]
+
+== CloudFront Invalidation
+
+The CloudFront invalidation information is presented through a structure (CFInvalidation) that contains the following properties.
+
+*CFInvalidation*
+[options="header",cols="1,1,2"]
+|===
+|Name   |Type   |Description
+//-------------
+|path   |String   | CloudFront path of the object to be invalidated.
+|===
+
+==== Request
+include::{snippets}/api/v1/invalidate/data/http-request.adoc[]
+
+===== cURL Sample
+include::{snippets}/api/v1/invalidate/data//curl-request.adoc[]
+
+
+==== Response
+
+===== Success
+include::{snippets}/api/v1/invalidate/data//http-response.adoc[]

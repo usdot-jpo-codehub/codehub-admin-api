@@ -1,14 +1,14 @@
 # codehub-admin-api
 CodeHub Admin API
-> Version: 2.7.0
+> Version: 2.8.0
 
-The Admin API of CodeHub has the function to administer the metadata information (documents) for the CodeHub Ingestion system. The API connect to an ElasticSearch storage system. The API will do actions on the Repos and Projects indexes. 
+The Admin API of CodeHub has the function to administer the metadata information (documents) for the CodeHub Ingestion system. The API connect to an ElasticSearch storage system. The API will do actions on the Repos and Projects indexes.
 
 ## Change Log
 Changes related to the previous version.
 
-> Previous Version: 2.6.0
-- Changes to support Engagement PopUps.
+> Previous Version: 2.7.0
+- Changes to support CloudFront invalidation.
 
 ## Usage
 Once the application is running on a configured port the API uses the standard REST verbs to manipulate the data.
@@ -491,11 +491,33 @@ Content-Type: application/json
   }
 }
 ```
+---
+
+## CloudFront
+The following entry is the endpoint to invalidate (i.e. reset cache) of an object in CloudFront
+
+### Invalidate CloudFront Path
+
+ - Method: POST
+ - URL: http://[host:port]/api/v1/invalidate
+ - Content-Type: application/json
+ - Response
+```json
+{
+  "timestamp": "2020-03-31T13:08:54Z",
+  "status" : "OK",
+  "code" : 200,
+  "path": "http://localhost:3000/api/v1/invalidate",
+  "verb" : "POST",
+  "traceid" : "20200323212338546",
+  "result" : "cloudFrontRequestId12345",
+}
+```
 
 ## Configuration
 The API requires the following environment variables
 
- 
+
 |Name   |Required   |Default   |Description|
 |--|--|--|----|
 |codehub.admin.api.es.host|mandatory||Sets the host of the target ElasticSearch|
@@ -504,6 +526,7 @@ The API requires the following environment variables
 |codehub.admin.api.chtoken|mandatory||Token for request authorization|
 |codehub.admin.api.configurations.index|mandatory|configurations|Configurations Index name.|
 |codehub.admin.api.configurations.default|mandatory|codehub-default-configuration|Configuration name to be use by the API.|
+|codehub.admin.api.cloudfront.distributionid|mandatory||AWS CloudFront Distribution ID containing items to be invalidated.|
 |codehub.admin.api.es.repos.index|optional|repositories|Index name in ElasticSearch that contains the data.|
 |codehub.admin.api.es.sort.by|optional|codehubData.lastModified|Field name that will be used for default sorting.|
 |codehub.admin.api.es.sort.order|optional|desc|Sorting direction (asc, desc).|
@@ -518,7 +541,7 @@ The API requires the following environment variables
 The API is a Java application and can be executed updating the values of the following command template.
 
 ```bash
-sh -c java -Djava.security.egd=file:/dev/./urandom -jar /codehub-admin-api-2.7.0.jar"
+sh -c java -Djava.security.egd=file:/dev/./urandom -jar /codehub-admin-api-2.8.0.jar"
 ```
 It is important to setup the environment variables before to execute the application.
 
@@ -550,16 +573,24 @@ A [Docker](https://www.docker.com/) image can be build with the next command lin
 The following command with the correct values for the environment variable will start a Docker container.
 ```bash
 docker run -p 3007:3007 --rm \
+-v $HOME/.aws:/home/.aws:ro \
 -e "server.port=3007" \
 -e "codehub.admin.api.chtoken=[CHTOKEN]" \
 -e "codehub.admin.api.es.host=[HOST]" \
 -e "codehub.admin.api.es.port=[PORT]" \
 -e "codehub.admin.api.es.scheme=[SCHEME]" \
+-e "codehub.admin.api.es.scheme=[SCHEME]" \
+-e "codehub.admin.api.cloudfront.distributionid=[DISTROID]" \
+-e "AWS_CREDENTIAL_PROFILES_FILE=/home/.aws/credentials" \
+-e "AWS_PROFILE=awsRoleName" \
+-e "AWS_REGION=my-region-1" \
 -t -i codehub-admin-api:latest
 ```
 
 
 ## Release History
+* 2.8.0
+  * Add CloudFront path invalidation feature.
 * 2.7.0
   * Add support for manage Engagement Popups.
 * 2.6.0
