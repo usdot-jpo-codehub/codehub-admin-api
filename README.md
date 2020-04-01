@@ -526,7 +526,7 @@ The API requires the following environment variables
 |codehub.admin.api.chtoken|mandatory||Token for request authorization|
 |codehub.admin.api.configurations.index|mandatory|configurations|Configurations Index name.|
 |codehub.admin.api.configurations.default|mandatory|codehub-default-configuration|Configuration name to be use by the API.|
-|codehub.admin.api.cloudfront.distributionid|mandatory||AWS CloudFront Distribution ID containing items to be invalidated.|
+|codehub.admin.api.cloudfront.distributionid|optional||AWS CloudFront Distribution ID containing items to be invalidated.|
 |codehub.admin.api.es.repos.index|optional|repositories|Index name in ElasticSearch that contains the data.|
 |codehub.admin.api.es.sort.by|optional|codehubData.lastModified|Field name that will be used for default sorting.|
 |codehub.admin.api.es.sort.order|optional|desc|Sorting direction (asc, desc).|
@@ -535,7 +535,9 @@ The API requires the following environment variables
 |server.port|optional|3007|Sets the DataHub Web API listening port|
 |codehub.admin.api.configurations.images.list|optional|http://d66sfbdx0p5w.cloudfront.net/images-category.json|URL to the file that contains the JSON array of image file names|
 |codehub.admin.api.configurations.images.path|optional|http://d66sfbdx0p5w.cloudfront.net|Base image path name|
-
+|AWS_REGION|optional||AWS region containing CloudFront distribution, required when using the CloudFront invalidate api locally|
+|AWS_PROFILE|optional||AWS profile containing AWS credentials, required when using the CloudFront invalidate api locally|
+|AWS_CREDENTIAL_PROFILES_FILE|optional||AWS profile containing AWS credentials, required when using the CloudFront invalidate api locally|
 
 ## Installation
 The API is a Java application and can be executed updating the values of the following command template.
