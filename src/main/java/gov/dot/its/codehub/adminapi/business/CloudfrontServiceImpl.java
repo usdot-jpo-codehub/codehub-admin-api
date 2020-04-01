@@ -14,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.amazonaws.AmazonServiceException;
-import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.services.cloudfront.AmazonCloudFront;
 import com.amazonaws.services.cloudfront.AmazonCloudFrontClientBuilder;
 import com.amazonaws.services.cloudfront.model.CreateInvalidationRequest;
