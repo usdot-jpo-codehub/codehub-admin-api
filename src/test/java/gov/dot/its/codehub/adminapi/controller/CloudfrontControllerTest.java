@@ -61,9 +61,8 @@ class CloudfrontControllerTest {
 	@MockBean
 	private CloudfrontService cloudfrontService;
 
-	private SecureRandom random;
 	public CloudfrontControllerTest() {
-		this.random = new SecureRandom();
+		new SecureRandom();
 	}
 
 	@Test
