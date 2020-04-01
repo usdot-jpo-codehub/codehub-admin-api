@@ -48,10 +48,10 @@ public class CloudfrontServiceImpl implements CloudfrontService {
 	@Autowired
 	private HeaderUtils headerUtils;
 
-	private final AmazonCloudFront cfclient = AmazonCloudFrontClientBuilder.defaultClient();
-
 	@Override
 	public ApiResponse<String> invalidate(HttpServletRequest request, CFInvalidation cfInvalidation) {
+		
+		AmazonCloudFront cfclient = AmazonCloudFrontClientBuilder.defaultClient();
 		
 		String path = cfInvalidation.getPath();
 
