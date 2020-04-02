@@ -69,7 +69,7 @@ public class CloudfrontServiceImpl implements CloudfrontService {
 			return apiResponse;
 		}
 
-		Paths paths = new Paths().withItems(path);
+		Paths paths = new Paths().withItems(path).withQuantity(1);
 		String callerReference = Long.toString(Instant.now().getEpochSecond());
 
 		InvalidationBatch invalidationBatch = new InvalidationBatch().withPaths(paths)
