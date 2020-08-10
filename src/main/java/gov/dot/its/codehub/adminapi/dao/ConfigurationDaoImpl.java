@@ -30,6 +30,8 @@ import gov.dot.its.codehub.adminapi.model.CHEngagementPopup;
 @Repository
 public class ConfigurationDaoImpl implements ConfigurationDao {
 
+	static final String PAINLESS = "painless";
+
 	@Value("${codehub.admin.api.configurations.index}")
 	private String configurationsIndex;
 
@@ -105,7 +107,7 @@ public class ConfigurationDaoImpl implements ConfigurationDao {
 				+ "  ctx._source.categories.add(params.cate);"
 				+ "}";
 
-		Script inline = new Script(ScriptType.INLINE, "painless",scriptCode, param);
+		Script inline = new Script(ScriptType.INLINE, PAINLESS, scriptCode, param);
 
 		UpdateRequest updateRequest = new UpdateRequest(configurationsIndex, "_doc", configurationId);
 		updateRequest.script(inline);
@@ -124,13 +126,13 @@ public class ConfigurationDaoImpl implements ConfigurationDao {
 		param.put("cate", jsonData);
 
 		String scriptCode = ""
-				+ "for(int i=0;i<ctx._source.categories.length;i++) {"
-				+ "  if(ctx._source.categories[i].id == params.cate.id){"
-				+ "    ctx._source.categories[i] = params.cate"
+				+ "for(int j=0;j<ctx._source.categories.length;j++) {"
+				+ "  if(ctx._source.categories[j].id == params.cate.id){"
+				+ "    ctx._source.categories[j] = params.cate; break;"
 				+ "  }"
 				+ "}";
 
-		Script inline = new Script(ScriptType.INLINE, "painless",scriptCode, param);
+		Script inline = new Script(ScriptType.INLINE, PAINLESS, scriptCode, param);
 
 		UpdateRequest updateRequest = new UpdateRequest(configurationsIndex, "_doc", configurationId);
 		updateRequest.script(inline);
@@ -163,17 +165,16 @@ public class ConfigurationDaoImpl implements ConfigurationDao {
 
 		String scriptCode = ""
 				+ "int remove_index = -1;"
-				+ "for(int i=0;i<ctx._source.categories.length;i++) {"
-				+ "  if(ctx._source.categories[i].id == params.cateId){"
-				+ "    remove_index = i;"
-				+ "    break;"
+				+ "for(int k=0;k<ctx._source.categories.length;k++) {"
+				+ "  if(ctx._source.categories[k].id == params.cateId){"
+				+ "    remove_index = k; break;"
 				+ "  }"
 				+ "}"
 				+ "if (remove_index >= 0) {"
 				+ "  ctx._source.categories.remove(remove_index);"
 				+ "}";
 
-		Script inline = new Script(ScriptType.INLINE, "painless",scriptCode, param);
+		Script inline = new Script(ScriptType.INLINE, PAINLESS, scriptCode, param);
 
 		UpdateRequest updateRequest = new UpdateRequest(configurationsIndex, "_doc", configurationId);
 		updateRequest.script(inline);
@@ -220,20 +221,20 @@ public class ConfigurationDaoImpl implements ConfigurationDao {
 		param.put("enpo", jsonData);
 
 		String scriptCode = ""
-				+ "for(int i=0;i<ctx._source.engagementPopups.length;i++) {"
+				+ "for(int l=0;l<ctx._source.engagementPopups.length;l++) {"
 				+ "  if (params.enpo.isActive == true) {"
-				+ "    if(ctx._source.engagementPopups[i].id != params.enpo.id) {"
-				+ "       if(ctx._source.engagementPopups[i].isActive == true) {"
-				+ "         ctx._source.engagementPopups[i].isActive = false;"
+				+ "    if(ctx._source.engagementPopups[l].id != params.enpo.id) {"
+				+ "       if(ctx._source.engagementPopups[l].isActive == true) {"
+				+ "         ctx._source.engagementPopups[l].isActive = false;"
 				+ "       }"
 				+ "    }"
 				+ "  }"
-				+ "  if(ctx._source.engagementPopups[i].id == params.enpo.id){"
-				+ "    ctx._source.engagementPopups[i] = params.enpo"
+				+ "  if(ctx._source.engagementPopups[l].id == params.enpo.id){"
+				+ "    ctx._source.engagementPopups[l] = params.enpo"
 				+ "  }"
 				+ "}";
 
-		Script inline = new Script(ScriptType.INLINE, "painless",scriptCode, param);
+		Script inline = new Script(ScriptType.INLINE, PAINLESS, scriptCode, param);
 
 		UpdateRequest updateRequest = new UpdateRequest(configurationsIndex, "_doc", configurationId);
 		updateRequest.script(inline);
@@ -253,17 +254,16 @@ public class ConfigurationDaoImpl implements ConfigurationDao {
 
 		String scriptCode = ""
 				+ "int found_index = -1;"
-				+ "for(int i=0;i<ctx._source.engagementPopups.length;i++) {"
-				+ "  if(ctx._source.engagementPopups[i].id == params.enpo.id){"
-				+ "    found_index = i;"
-				+ "    break;"
+				+ "for(int m=0;m<ctx._source.engagementPopups.length;m++) {"
+				+ "  if(ctx._source.engagementPopups[m].id == params.enpo.id){"
+				+ "    found_index = m; break;"
 				+ "  }"
 				+ "}"
 				+ "if (found_index < 0) {"
 				+ "  ctx._source.engagementPopups.add(params.enpo);"
 				+ "}";
 
-		Script inline = new Script(ScriptType.INLINE, "painless",scriptCode, param);
+		Script inline = new Script(ScriptType.INLINE, PAINLESS, scriptCode, param);
 
 		UpdateRequest updateRequest = new UpdateRequest(configurationsIndex, "_doc", configurationId);
 		updateRequest.script(inline);
@@ -280,17 +280,16 @@ public class ConfigurationDaoImpl implements ConfigurationDao {
 
 		String scriptCode = ""
 				+ "int remove_index = -1;"
-				+ "for(int i=0;i<ctx._source.engagementPopups.length;i++) {"
-				+ "  if(ctx._source.engagementPopups[i].id == params.enpoId){"
-				+ "    remove_index = i;"
-				+ "    break;"
+				+ "for(int n=0;n<ctx._source.engagementPopups.length;n++) {"
+				+ "  if(ctx._source.engagementPopups[n].id == params.enpoId){"
+				+ "    remove_index = n; break;"
 				+ "  }"
 				+ "}"
 				+ "if (remove_index >= 0) {"
 				+ "  ctx._source.engagementPopups.remove(remove_index);"
 				+ "}";
 
-		Script inline = new Script(ScriptType.INLINE, "painless",scriptCode, param);
+		Script inline = new Script(ScriptType.INLINE, PAINLESS, scriptCode, param);
 
 		UpdateRequest updateRequest = new UpdateRequest(configurationsIndex, "_doc", configurationId);
 		updateRequest.script(inline);

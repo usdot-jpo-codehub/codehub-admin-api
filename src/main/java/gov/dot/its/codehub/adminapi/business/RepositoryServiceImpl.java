@@ -30,7 +30,7 @@ public class RepositoryServiceImpl implements RepositoryService {
 
 	private static final String CHTOKEN_KEY = "CHTOKEN";
 	private static final String MESSAGE_INVALID_TOKEN = "Invalid token";
-	private static final String MESSAGE_TEMPLATE = "%s : %s ";
+	private static final String MESSAGE_TEMPLATE = "%s : %s %s";
 	private static final String NOT_FOUND = "NOT_FOUND";
 
 	@Autowired
@@ -53,8 +53,9 @@ public class RepositoryServiceImpl implements RepositoryService {
 		ApiResponse<List<CHRepository>> apiResponse = new ApiResponse<>();
 		List<ApiError> errors = new ArrayList<>();
 
+		String msg = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_GET_ALL, MESSAGE_INVALID_TOKEN);
 		if (!headerUtils.validateToken(request.getHeader(CHTOKEN_KEY))) {
-			logger.warn(String.format(MESSAGE_TEMPLATE, RESPONSE_GET_ALL, MESSAGE_INVALID_TOKEN));
+			logger.warn(msg);
 			errors.add(new ApiError(MESSAGE_INVALID_TOKEN));
 			apiResponse.setResponse(HttpStatus.UNAUTHORIZED, null, null, errors, request);
 			return apiResponse;
@@ -68,11 +69,13 @@ public class RepositoryServiceImpl implements RepositoryService {
 
 			if (data != null && !data.isEmpty()) {
 				apiResponse.setResponse(HttpStatus.OK, data, null, null, request);
-				logger.info(String.format(MESSAGE_TEMPLATE, RESPONSE_GET_ALL+HttpStatus.OK.toString(), String.valueOf(data.size())));
+				msg = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_GET_ALL+HttpStatus.OK.toString(), String.valueOf(data.size()));
+				logger.info(msg);
 				return apiResponse;
 			} else {
 				apiResponse.setResponse(HttpStatus.NO_CONTENT, null, null, null, request);
-				logger.info(MESSAGE_TEMPLATE, RESPONSE_GET_ALL + HttpStatus.NO_CONTENT.toString());
+				msg = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_GET_ALL + HttpStatus.NO_CONTENT.toString());
+				logger.info(msg);
 				return apiResponse;
 			}
 		} catch(ElasticsearchStatusException | IOException e) {
@@ -85,7 +88,8 @@ public class RepositoryServiceImpl implements RepositoryService {
 	public ApiResponse<CHRepository> addRepository(HttpServletRequest request, CHRepository chRepository) {
 		chRepository.setId(apiUtils.getMd5(chRepository.getSourceData().getRepositoryUrl()));
 
-		logger.info(String.format(MESSAGE_TEMPLATE,"Request: Add Repository.", chRepository.getId()));
+		String msg = apiUtils.stringFormat(MESSAGE_TEMPLATE,"Request: Add Repository.", chRepository.getId());
+		logger.info(msg);
 		final String RESPONSE_MESSAGE = "Response: Add Repository. ";
 
 		ApiResponse<CHRepository> apiResponse = new ApiResponse<>();
@@ -93,7 +97,8 @@ public class RepositoryServiceImpl implements RepositoryService {
 		List<ApiMessage> messages = new ArrayList<>();
 
 		if (!headerUtils.validateToken(request.getHeader(CHTOKEN_KEY))) {
-			logger.warn(String.format(MESSAGE_TEMPLATE, RESPONSE_MESSAGE, MESSAGE_INVALID_TOKEN));
+			msg = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_MESSAGE, MESSAGE_INVALID_TOKEN);
+			logger.warn(msg);
 			errors.add(new ApiError(MESSAGE_INVALID_TOKEN));
 			apiResponse.setResponse(HttpStatus.UNAUTHORIZED, null, null, errors, request);
 			return apiResponse;
@@ -111,7 +116,8 @@ public class RepositoryServiceImpl implements RepositoryService {
 			messages.add(new ApiMessage(result));
 
 			apiResponse.setResponse(HttpStatus.OK, chRepository, messages, null, request);
-			logger.info(String.format(MESSAGE_TEMPLATE,RESPONSE_MESSAGE+HttpStatus.OK.toString(), chRepository.getId()));
+			msg = apiUtils.stringFormat(MESSAGE_TEMPLATE,RESPONSE_MESSAGE+HttpStatus.OK.toString(), chRepository.getId());
+			logger.info(msg);
 			return apiResponse;
 
 		} catch(ElasticsearchStatusException | IOException e) {
@@ -122,14 +128,16 @@ public class RepositoryServiceImpl implements RepositoryService {
 
 	@Override
 	public ApiResponse<CHRepository> updateRepository(HttpServletRequest request, CHRepository chRepository) {
-		logger.info(String.format(MESSAGE_TEMPLATE,"Request: Update Repository.", chRepository.getId()));
+		String msg = apiUtils.stringFormat(MESSAGE_TEMPLATE,"Request: Update Repository.", chRepository.getId());
+		logger.info(msg);
 		final String RESPONSE_MESSAGE = "Response: Update Repository. ";
 
 		ApiResponse<CHRepository> apiResponse = new ApiResponse<>();
 		List<ApiError> errors = new ArrayList<>();
 
 		if (!headerUtils.validateToken(request.getHeader(CHTOKEN_KEY))) {
-			logger.warn(String.format(MESSAGE_TEMPLATE, RESPONSE_MESSAGE, MESSAGE_INVALID_TOKEN));
+			msg = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_MESSAGE, MESSAGE_INVALID_TOKEN);
+			logger.warn(msg);
 			errors.add(new ApiError(MESSAGE_INVALID_TOKEN));
 			apiResponse.setResponse(HttpStatus.UNAUTHORIZED, null, null, errors, request);
 			return apiResponse;
@@ -142,7 +150,8 @@ public class RepositoryServiceImpl implements RepositoryService {
 			messages.add(new ApiMessage(String.format(MESSAGE_TEMPLATE, result, chRepository.getId())));
 
 			apiResponse.setResponse(HttpStatus.OK, chRepository, messages, null, request);
-			logger.info(String.format(MESSAGE_TEMPLATE,RESPONSE_MESSAGE+HttpStatus.OK.toString(), result + " : "+chRepository.getId()));
+			msg = apiUtils.stringFormat(MESSAGE_TEMPLATE,RESPONSE_MESSAGE+HttpStatus.OK.toString(), result, chRepository.getId());
+			logger.info(msg);
 			return apiResponse;
 
 		} catch(ElasticsearchStatusException | IOException e) {
@@ -152,14 +161,16 @@ public class RepositoryServiceImpl implements RepositoryService {
 
 	@Override
 	public ApiResponse<String> deleteRepository(HttpServletRequest request, String id) {
-		logger.info(String.format(MESSAGE_TEMPLATE,"Request: Delete Repository.",id));
+		String msg = apiUtils.stringFormat(MESSAGE_TEMPLATE,"Request: Delete Repository.",id);
+		logger.info(msg);
 		final String RESPONSE_MESSAGE = "Response: Delete Repository. ";
 
 		ApiResponse<String> apiResponse = new ApiResponse<>();
 		List<ApiError> errors = new ArrayList<>();
 
 		if (!headerUtils.validateToken(request.getHeader(CHTOKEN_KEY))) {
-			logger.warn(String.format(MESSAGE_TEMPLATE, RESPONSE_MESSAGE, MESSAGE_INVALID_TOKEN));
+			msg = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_MESSAGE, MESSAGE_INVALID_TOKEN);
+			logger.warn(msg);
 			errors.add(new ApiError(MESSAGE_INVALID_TOKEN));
 			apiResponse.setResponse(HttpStatus.UNAUTHORIZED, null, null, errors, request);
 			return apiResponse;
@@ -173,10 +184,12 @@ public class RepositoryServiceImpl implements RepositoryService {
 
 			if (result.compareToIgnoreCase(NOT_FOUND)== 0) {
 				apiResponse.setResponse(HttpStatus.NOT_FOUND, id, messages, null, request);
-				logger.info(String.format(MESSAGE_TEMPLATE, RESPONSE_MESSAGE+HttpStatus.NOT_FOUND.toString(), result + " : "+ id));
+				msg = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_MESSAGE+HttpStatus.NOT_FOUND.toString(), result, id);
+				logger.info(msg);
 			} else {
 				apiResponse.setResponse(HttpStatus.OK, id, messages, null, request);
-				logger.info(String.format(MESSAGE_TEMPLATE, RESPONSE_MESSAGE+HttpStatus.OK.toString(), result + " : "+ id));
+				msg = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_MESSAGE+HttpStatus.OK.toString(), result, id);
+				logger.info(msg);
 			}
 			return apiResponse;
 
@@ -187,14 +200,16 @@ public class RepositoryServiceImpl implements RepositoryService {
 
 	@Override
 	public ApiResponse<List<String>> deleteRepositories(HttpServletRequest request, List<String> repositoryIds) {
-		logger.info(String.format(MESSAGE_TEMPLATE,"Request: Delete Repositories.", String.valueOf(repositoryIds.size())));
+		String msg = apiUtils.stringFormat(MESSAGE_TEMPLATE,"Request: Delete Repositories.", String.valueOf(repositoryIds.size()));
+		logger.info(msg);
 		final String RESPONSE_MESSAGE = "Response: Delete Repositories. ";
 
 		ApiResponse<List<String>> apiResponse = new ApiResponse<>();
 		List<ApiError> errors = new ArrayList<>();
 
 		if (!headerUtils.validateToken(request.getHeader(CHTOKEN_KEY))) {
-			logger.warn(String.format(MESSAGE_TEMPLATE, RESPONSE_MESSAGE, MESSAGE_INVALID_TOKEN));
+			msg = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_MESSAGE, MESSAGE_INVALID_TOKEN);
+			logger.warn(msg);
 			errors.add(new ApiError(MESSAGE_INVALID_TOKEN));
 			apiResponse.setResponse(HttpStatus.UNAUTHORIZED, null, null, errors, request);
 			return apiResponse;
@@ -208,9 +223,11 @@ public class RepositoryServiceImpl implements RepositoryService {
 				messages.add(new ApiMessage(String.format(MESSAGE_TEMPLATE, result, id)));
 
 				if (result.compareToIgnoreCase(NOT_FOUND)== 0) {
-					logger.info(String.format(MESSAGE_TEMPLATE, RESPONSE_MESSAGE+HttpStatus.NOT_FOUND.toString(), result + " : " + id));
+					msg = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_MESSAGE+HttpStatus.NOT_FOUND.toString(), result + " : " + id);
+					logger.info(msg);
 				} else {
-					logger.info(String.format(MESSAGE_TEMPLATE, RESPONSE_MESSAGE+HttpStatus.OK.toString(), result+" : "+id));
+					msg = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_MESSAGE+HttpStatus.OK.toString(), result+" : "+id);
+					logger.info(msg);
 				}
 
 			} catch(ElasticsearchStatusException | IOException e) {
@@ -228,7 +245,8 @@ public class RepositoryServiceImpl implements RepositoryService {
 
 	@Override
 	public ApiResponse<List<String>> resetCache(HttpServletRequest request, List<String> repositoryIds) {
-		logger.info(String.format(MESSAGE_TEMPLATE,"Request: Reset cache.", String.valueOf(repositoryIds.size())));
+		String msg = apiUtils.stringFormat(MESSAGE_TEMPLATE,"Request: Reset cache.", String.valueOf(repositoryIds.size()));
+		logger.info(msg);
 		final String RESPONSE_MESSAGE = "Response: Reset cache. ";
 		List<ApiError> errors = new ArrayList<>();
 		List<ApiMessage> messages = new ArrayList<>();
@@ -237,7 +255,8 @@ public class RepositoryServiceImpl implements RepositoryService {
 		if (!headerUtils.validateToken(request.getHeader(CHTOKEN_KEY))) {
 			errors.add(new ApiError(MESSAGE_INVALID_TOKEN));
 			apiResponse.setResponse(HttpStatus.UNAUTHORIZED, null, null, errors, request);
-			logger.warn(String.format(MESSAGE_TEMPLATE, RESPONSE_MESSAGE, MESSAGE_INVALID_TOKEN));
+			msg = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_MESSAGE, MESSAGE_INVALID_TOKEN);
+			logger.warn(msg);
 			return apiResponse;
 		}
 
@@ -247,9 +266,11 @@ public class RepositoryServiceImpl implements RepositoryService {
 				messages.add(new ApiMessage(String.format(MESSAGE_TEMPLATE, result, id)));
 
 				if (result.compareToIgnoreCase(NOT_FOUND) != 0) {
-					logger.info(String.format(MESSAGE_TEMPLATE, RESPONSE_MESSAGE+HttpStatus.OK.toString(), result+" : "+id));
+					msg = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_MESSAGE+HttpStatus.OK.toString(), result+" : "+id);
+					logger.info(msg);
 				} else {
-					logger.info(String.format(MESSAGE_TEMPLATE, RESPONSE_MESSAGE+HttpStatus.NOT_FOUND.toString(), result + " : " + id));
+					msg = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_MESSAGE+HttpStatus.NOT_FOUND.toString(), result + " : " + id);
+					logger.info(msg);
 				}
 
 			} catch(ElasticsearchStatusException | IOException e) {
