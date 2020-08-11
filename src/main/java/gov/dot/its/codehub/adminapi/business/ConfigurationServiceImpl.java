@@ -33,7 +33,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
 	private static final String CHTOKEN_KEY = "CHTOKEN";
 	private static final String MESSAGE_INVALID_TOKEN = "Invalid token";
-	private static final String MESSAGE_TEMPLATE = "{} : {} ";
+	private static final String MESSAGE_TEMPLATE = "%s : %s %s";
 
 	@Autowired
 	private ConfigurationDao configurationDao;
@@ -58,9 +58,9 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 		ApiResponse<CHConfiguration> apiResponse = new ApiResponse<>();
 		List<ApiError> errors = new ArrayList<>();
 
+		String logMessage = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_MSG, MESSAGE_INVALID_TOKEN);
 		if (!headerUtils.validateToken(request.getHeader(CHTOKEN_KEY))) {
-			logger.warn(MESSAGE_TEMPLATE, RESPONSE_MSG, MESSAGE_INVALID_TOKEN);
-			errors.add(new ApiError(MESSAGE_INVALID_TOKEN));
+			errors.add(new ApiError(logMessage));
 			apiResponse.setResponse(HttpStatus.UNAUTHORIZED, null, null, errors, request);
 			return apiResponse;
 		}
@@ -71,12 +71,14 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
 			if (configuration != null) {
 				apiResponse.setResponse(HttpStatus.OK, configuration, null, null, request);
-				logger.info(MESSAGE_TEMPLATE, RESPONSE_MSG,HttpStatus.OK.toString());
+				logMessage = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_MSG, HttpStatus.OK.toString());
+				logger.info(logMessage);
 				return apiResponse;
 			}
 
 			apiResponse.setResponse(HttpStatus.NO_CONTENT, null, null, null, request);
-			logger.info(MESSAGE_TEMPLATE, RESPONSE_MSG, HttpStatus.NO_CONTENT.toString());
+			logMessage = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_MSG, HttpStatus.NO_CONTENT.toString());
+			logger.info(logMessage);
 			return apiResponse;
 
 
@@ -92,9 +94,10 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
 		ApiResponse<List<CHCategory>> apiResponse = new ApiResponse<>();
 		List<ApiError> errors = new ArrayList<>();
+		String logMessage = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_MSG, MESSAGE_INVALID_TOKEN);
 
 		if (!headerUtils.validateToken(request.getHeader(CHTOKEN_KEY))) {
-			logger.warn(MESSAGE_TEMPLATE, RESPONSE_MSG, MESSAGE_INVALID_TOKEN);
+			logger.warn(logMessage);
 			errors.add(new ApiError(MESSAGE_INVALID_TOKEN));
 			apiResponse.setResponse(HttpStatus.UNAUTHORIZED, null, null, errors, request);
 			return apiResponse;
@@ -106,12 +109,14 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
 			if (categories != null && !categories.isEmpty()) {
 				apiResponse.setResponse(HttpStatus.OK, categories, null, null, request);
-				logger.info(MESSAGE_TEMPLATE, RESPONSE_MSG,HttpStatus.OK.toString()+" "+categories.size());
+				logMessage = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_MSG,HttpStatus.OK.toString(), categories.size());
+				logger.info(logMessage);
 				return apiResponse;
 			}
 
 			apiResponse.setResponse(HttpStatus.NO_CONTENT, null, null, null, request);
-			logger.info(MESSAGE_TEMPLATE, RESPONSE_MSG, HttpStatus.NO_CONTENT.toString());
+			logMessage = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_MSG, HttpStatus.NO_CONTENT.toString());
+			logger.info(logMessage);
 			return apiResponse;
 
 
@@ -128,10 +133,11 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 		ApiResponse<CHCategory> apiResponse = new ApiResponse<>();
 		List<ApiError> errors = new ArrayList<>();
 		List<ApiMessage> messages = new ArrayList<>();
+		String logMessage = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_MSG, MESSAGE_INVALID_TOKEN);
 
 		if (!headerUtils.validateToken(request.getHeader(CHTOKEN_KEY))) {
-			logger.warn(MESSAGE_TEMPLATE, RESPONSE_MSG, MESSAGE_INVALID_TOKEN);
-			errors.add(new ApiError(MESSAGE_INVALID_TOKEN));
+			logger.warn(logMessage);
+			errors.add(new ApiError(logMessage));
 			apiResponse.setResponse(HttpStatus.UNAUTHORIZED, null, null, errors, request);
 			return apiResponse;
 		}
@@ -144,12 +150,14 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 			if (result != null) {
 				messages.add(new ApiMessage(result));
 				apiResponse.setResponse(HttpStatus.OK, chCategory, messages, null, request);
-				logger.info(MESSAGE_TEMPLATE, RESPONSE_MSG,HttpStatus.OK.toString()+" "+result);
+				logMessage = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_MSG,HttpStatus.OK.toString(), result);
+				logger.info(logMessage);
 				return apiResponse;
 			}
 
 			apiResponse.setResponse(HttpStatus.INTERNAL_SERVER_ERROR, null, null, null, request);
-			logger.info(MESSAGE_TEMPLATE, RESPONSE_MSG, HttpStatus.INTERNAL_SERVER_ERROR.toString());
+			logMessage = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_MSG, HttpStatus.INTERNAL_SERVER_ERROR.toString());
+			logger.info(logMessage);
 			return apiResponse;
 
 
@@ -166,11 +174,12 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 		List<ApiError> errors = new ArrayList<>();
 		List<ApiMessage> messages = new ArrayList<>();
 		ApiResponse<CHCategory> apiResponse = new ApiResponse<>();
+		String logMessage = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_MSG, MESSAGE_INVALID_TOKEN);
 
 		if (!headerUtils.validateToken(request.getHeader(CHTOKEN_KEY))) {
-			errors.add(new ApiError(MESSAGE_INVALID_TOKEN));
+			errors.add(new ApiError(logMessage));
 			apiResponse.setResponse(HttpStatus.UNAUTHORIZED, null, null, errors, request);
-			logger.warn(MESSAGE_TEMPLATE, RESPONSE_MSG, MESSAGE_INVALID_TOKEN);
+			logger.warn(logMessage);
 			return apiResponse;
 		}
 
@@ -180,12 +189,14 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
 			if (result != null) {
 				messages.add(new ApiMessage(result));
-				logger.info(MESSAGE_TEMPLATE, RESPONSE_MSG,HttpStatus.OK.toString()+" "+result);
+				logMessage = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_MSG, HttpStatus.OK.toString(), result);
+				logger.info(logMessage);
 				apiResponse.setResponse(HttpStatus.OK, chCategory, messages, null, request);
 				return apiResponse;
 			}
 
-			logger.info(MESSAGE_TEMPLATE, RESPONSE_MSG, HttpStatus.INTERNAL_SERVER_ERROR.toString());
+			logMessage = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_MSG, HttpStatus.INTERNAL_SERVER_ERROR.toString());
+			logger.info(logMessage);
 			apiResponse.setResponse(HttpStatus.INTERNAL_SERVER_ERROR, null, null, null, request);
 			return apiResponse;
 
@@ -204,9 +215,10 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 		ApiResponse<CHCategory> apiResponse = new ApiResponse<>();
 		List<ApiMessage> messages = new ArrayList<>();
 
+		String logMessage = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_MSG, MESSAGE_INVALID_TOKEN);
 		if (!headerUtils.validateToken(request.getHeader(CHTOKEN_KEY))) {
 			errors.add(new ApiError(MESSAGE_INVALID_TOKEN));
-			logger.warn(MESSAGE_TEMPLATE, RESPONSE_MSG, MESSAGE_INVALID_TOKEN);
+			logger.warn(logMessage);
 			apiResponse.setResponse(HttpStatus.UNAUTHORIZED, null, null, errors, request);
 			return apiResponse;
 		}
@@ -217,12 +229,14 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
 			if (category != null) {
 				apiResponse.setResponse(HttpStatus.OK, category, messages, null, request);
-				logger.info(MESSAGE_TEMPLATE, RESPONSE_MSG,HttpStatus.OK.toString());
+				logMessage = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_MSG,HttpStatus.OK.toString());
+				logger.info(logMessage);
 				return apiResponse;
 			}
 
 			apiResponse.setResponse(HttpStatus.NOT_FOUND, null, null, null, request);
-			logger.info(MESSAGE_TEMPLATE, RESPONSE_MSG, HttpStatus.NOT_FOUND.toString());
+			logMessage = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_MSG, HttpStatus.NOT_FOUND.toString());
+			logger.info(logMessage);
 			return apiResponse;
 
 
@@ -240,9 +254,10 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 		List<ApiMessage> messages = new ArrayList<>();
 		List<ApiError> errors = new ArrayList<>();
 
+		String logMsg = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_MSG, MESSAGE_INVALID_TOKEN);
 		if (!headerUtils.validateToken(request.getHeader(CHTOKEN_KEY))) {
 			errors.add(new ApiError(MESSAGE_INVALID_TOKEN));
-			logger.warn(MESSAGE_TEMPLATE, RESPONSE_MSG, MESSAGE_INVALID_TOKEN);
+			logger.warn(logMsg);
 			apiResponse.setResponse(HttpStatus.UNAUTHORIZED, null, null, errors, request);
 			return apiResponse;
 		}
@@ -260,12 +275,14 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
 				messages.add(new ApiMessage(id));
 				apiResponse.setResponse(HttpStatus.OK, null, messages, null, request);
-				logger.info(MESSAGE_TEMPLATE, RESPONSE_MSG,HttpStatus.OK.toString());
+				logMsg = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_MSG,HttpStatus.OK.toString());
+				logger.info(logMsg);
 				return apiResponse;
 			}
 
 			apiResponse.setResponse(HttpStatus.NOT_FOUND, null, null, null, request);
-			logger.info(MESSAGE_TEMPLATE, RESPONSE_MSG, HttpStatus.NOT_FOUND.toString());
+			logMsg = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_MSG, HttpStatus.NOT_FOUND.toString());
+			logger.info(logMsg);
 			return apiResponse;
 
 
@@ -282,8 +299,9 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 		ApiResponse<List<String>> apiResponse = new ApiResponse<>();
 		List<ApiError> errors = new ArrayList<>();
 
+		String msg = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_MSG, MESSAGE_INVALID_TOKEN);
 		if (!headerUtils.validateToken(request.getHeader(CHTOKEN_KEY))) {
-			logger.warn(MESSAGE_TEMPLATE, RESPONSE_MSG, MESSAGE_INVALID_TOKEN);
+			logger.warn(msg);
 			errors.add(new ApiError(MESSAGE_INVALID_TOKEN));
 			apiResponse.setResponse(HttpStatus.UNAUTHORIZED, null, null, errors, request);
 			return apiResponse;
@@ -295,12 +313,14 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
 			if (images != null && !images.isEmpty()) {
 				apiResponse.setResponse(HttpStatus.OK, images, null, null, request);
-				logger.info(MESSAGE_TEMPLATE, RESPONSE_MSG,HttpStatus.OK.toString()+" "+images.size());
+				msg = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_MSG,HttpStatus.OK.toString(), images.size());
+				logger.info(msg);
 				return apiResponse;
 			}
 
 			apiResponse.setResponse(HttpStatus.NO_CONTENT, null, null, null, request);
-			logger.info(MESSAGE_TEMPLATE, RESPONSE_MSG, HttpStatus.NO_CONTENT.toString());
+			msg = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_MSG, HttpStatus.NO_CONTENT.toString());
+			logger.info(msg);
 			return apiResponse;
 
 
@@ -317,8 +337,9 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 		ApiResponse<List<CHEngagementPopup>> apiResponse = new ApiResponse<>();
 		List<ApiError> errors = new ArrayList<>();
 
+		String logMsg = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_MSG, MESSAGE_INVALID_TOKEN);
 		if (!headerUtils.validateToken(request.getHeader(CHTOKEN_KEY))) {
-			logger.warn(MESSAGE_TEMPLATE, RESPONSE_MSG, MESSAGE_INVALID_TOKEN);
+			logger.warn(logMsg);
 			errors.add(new ApiError(MESSAGE_INVALID_TOKEN));
 			apiResponse.setResponse(HttpStatus.UNAUTHORIZED, null, null, errors, request);
 			return apiResponse;
@@ -330,12 +351,14 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
 			if (engagementPopups != null && !engagementPopups.isEmpty()) {
 				apiResponse.setResponse(HttpStatus.OK, engagementPopups, null, null, request);
-				logger.info(MESSAGE_TEMPLATE, RESPONSE_MSG,HttpStatus.OK.toString()+" "+engagementPopups.size());
+				logMsg = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_MSG,HttpStatus.OK.toString()+" "+engagementPopups.size());
+				logger.info(logMsg);
 				return apiResponse;
 			}
 
 			apiResponse.setResponse(HttpStatus.NO_CONTENT, null, null, null, request);
-			logger.info(MESSAGE_TEMPLATE, RESPONSE_MSG, HttpStatus.NO_CONTENT.toString());
+			logMsg = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_MSG, HttpStatus.NO_CONTENT.toString());
+			logger.info(logMsg);
 			return apiResponse;
 
 
@@ -346,17 +369,18 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
 	@Override
 	public ApiResponse<CHEngagementPopup> updateEngagementPopup(HttpServletRequest request, CHEngagementPopup engagementPopup) {
-		logger.info("Request: Update Engagement Popup");
 		final String RESPONSE_MSG = "Response: PUT Engagement Popup. ";
+		logger.info("Request: Update Engagement Popup");
 
-		List<ApiError> errors = new ArrayList<>();
 		List<ApiMessage> messages = new ArrayList<>();
+		List<ApiError> errors = new ArrayList<>();
 		ApiResponse<CHEngagementPopup> apiResponse = new ApiResponse<>();
 
+		String msg = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_MSG, MESSAGE_INVALID_TOKEN);
 		if (!headerUtils.validateToken(request.getHeader(CHTOKEN_KEY))) {
 			errors.add(new ApiError(MESSAGE_INVALID_TOKEN));
 			apiResponse.setResponse(HttpStatus.UNAUTHORIZED, null, null, errors, request);
-			logger.warn(MESSAGE_TEMPLATE, RESPONSE_MSG, MESSAGE_INVALID_TOKEN);
+			logger.warn(msg);
 			return apiResponse;
 		}
 
@@ -366,12 +390,14 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
 			if (result != null) {
 				messages.add(new ApiMessage(result));
-				logger.info(MESSAGE_TEMPLATE, RESPONSE_MSG,HttpStatus.OK.toString()+" "+result);
+				msg = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_MSG,HttpStatus.OK.toString(), result);
+				logger.info(msg);
 				apiResponse.setResponse(HttpStatus.OK, engagementPopup, messages, null, request);
 				return apiResponse;
 			}
 
-			logger.info(MESSAGE_TEMPLATE, RESPONSE_MSG, HttpStatus.INTERNAL_SERVER_ERROR.toString());
+			msg = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_MSG, HttpStatus.INTERNAL_SERVER_ERROR.toString());
+			logger.info(msg);
 			apiResponse.setResponse(HttpStatus.INTERNAL_SERVER_ERROR, null, null, null, request);
 			return apiResponse;
 
@@ -390,10 +416,11 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 		List<ApiMessage> messages = new ArrayList<>();
 		ApiResponse<CHEngagementPopup> apiResponse = new ApiResponse<>();
 
+		String logMessage = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_MSG, MESSAGE_INVALID_TOKEN);
 		if (!headerUtils.validateToken(request.getHeader(CHTOKEN_KEY))) {
 			errors.add(new ApiError(MESSAGE_INVALID_TOKEN));
 			apiResponse.setResponse(HttpStatus.UNAUTHORIZED, null, null, errors, request);
-			logger.warn(MESSAGE_TEMPLATE, RESPONSE_MSG, MESSAGE_INVALID_TOKEN);
+			logger.warn(logMessage);
 			return apiResponse;
 		}
 
@@ -404,12 +431,14 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
 			if (result != null) {
 				messages.add(new ApiMessage(result));
-				logger.info(MESSAGE_TEMPLATE, RESPONSE_MSG,HttpStatus.OK.toString()+" "+result);
+				logMessage = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_MSG,HttpStatus.OK.toString(), result);
+				logger.info(logMessage);
 				apiResponse.setResponse(HttpStatus.OK, cdEngagementPopup, messages, null, request);
 				return apiResponse;
 			}
 
-			logger.info(MESSAGE_TEMPLATE, RESPONSE_MSG, HttpStatus.INTERNAL_SERVER_ERROR.toString());
+			logMessage = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_MSG, HttpStatus.INTERNAL_SERVER_ERROR.toString());
+			logger.info(logMessage);
 			apiResponse.setResponse(HttpStatus.INTERNAL_SERVER_ERROR, null, null, null, request);
 			return apiResponse;
 
@@ -428,9 +457,10 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 		List<ApiMessage> messages = new ArrayList<>();
 		List<ApiError> errors = new ArrayList<>();
 
+		String msg = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_MSG, MESSAGE_INVALID_TOKEN);
 		if (!headerUtils.validateToken(request.getHeader(CHTOKEN_KEY))) {
 			errors.add(new ApiError(MESSAGE_INVALID_TOKEN));
-			logger.warn(MESSAGE_TEMPLATE, RESPONSE_MSG, MESSAGE_INVALID_TOKEN);
+			logger.warn(msg);
 			apiResponse.setResponse(HttpStatus.UNAUTHORIZED, null, null, errors, request);
 			return apiResponse;
 		}
@@ -442,12 +472,14 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 			if (result) {
 				messages.add(new ApiMessage(id));
 				apiResponse.setResponse(HttpStatus.OK, null, messages, null, request);
-				logger.info(MESSAGE_TEMPLATE, RESPONSE_MSG,HttpStatus.OK.toString());
+				msg = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_MSG,HttpStatus.OK.toString());
+				logger.info(msg);
 				return apiResponse;
 			}
 
 			apiResponse.setResponse(HttpStatus.NOT_FOUND, null, null, null, request);
-			logger.info(MESSAGE_TEMPLATE, RESPONSE_MSG, HttpStatus.NOT_FOUND.toString());
+			msg = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_MSG, HttpStatus.NOT_FOUND.toString());
+			logger.info(msg);
 			return apiResponse;
 
 
