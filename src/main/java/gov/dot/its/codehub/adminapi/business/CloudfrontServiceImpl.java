@@ -30,7 +30,7 @@ import gov.dot.its.codehub.adminapi.utils.HeaderUtils;
 @Service
 public class CloudfrontServiceImpl implements CloudfrontService {
 
-	private static final Logger logger = LoggerFactory.getLogger(RepositoryServiceImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(CloudfrontServiceImpl.class);
 
 	private static final String CHTOKEN_KEY = "CHTOKEN";
 	private static final String MESSAGE_INVALID_TOKEN = "Invalid token";

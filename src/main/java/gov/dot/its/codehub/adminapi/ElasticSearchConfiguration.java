@@ -16,7 +16,7 @@ import org.springframework.context.annotation.PropertySource;
 @ConfigurationProperties(prefix = "codehub.admin.api.es")
 public class ElasticSearchConfiguration extends AbstractFactoryBean<RestHighLevelClient> {
 
-	private static final Logger logger = LoggerFactory.getLogger(ElasticSearchConfiguration.class);
+	private static final Logger loggerMsg = LoggerFactory.getLogger(ElasticSearchConfiguration.class);
 
 	@Value("${codehub.admin.api.es.host}")
 	private String host;
@@ -34,7 +34,7 @@ public class ElasticSearchConfiguration extends AbstractFactoryBean<RestHighLeve
 				restHighLevelClient.close();
 			}
 		} catch (final Exception e) {
-			logger.error("Error closing ElasticSearch client: ", e);
+			loggerMsg.error("Error closing ElasticSearch client: ", e);
 		}
 	}
 
@@ -60,7 +60,7 @@ public class ElasticSearchConfiguration extends AbstractFactoryBean<RestHighLeve
 							new HttpHost(host, port, scheme)
 							));
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			loggerMsg.error(e.getMessage());
 		}
 		return restHighLevelClient;
 	}
