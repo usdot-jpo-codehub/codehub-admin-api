@@ -147,7 +147,8 @@ public class RepositoryServiceImpl implements RepositoryService {
 
 			String result = repositoryDao.updateRepository(chRepository);
 			List<ApiMessage> messages = new ArrayList<>();
-			messages.add(new ApiMessage(String.format(MESSAGE_TEMPLATE, result, chRepository.getId())));
+			msg = apiUtils.stringFormat(MESSAGE_TEMPLATE, result, chRepository.getId());
+			messages.add(new ApiMessage(msg));
 
 			apiResponse.setResponse(HttpStatus.OK, chRepository, messages, null, request);
 			msg = apiUtils.stringFormat(MESSAGE_TEMPLATE,RESPONSE_MESSAGE+HttpStatus.OK.toString(), result, chRepository.getId());
@@ -180,7 +181,8 @@ public class RepositoryServiceImpl implements RepositoryService {
 
 			String result = repositoryDao.deleteRepository(id);
 			List<ApiMessage> messages = new ArrayList<>();
-			messages.add(new ApiMessage(String.format(MESSAGE_TEMPLATE, result, id)));
+			msg = apiUtils.stringFormat(MESSAGE_TEMPLATE, result, id);
+			messages.add(new ApiMessage(msg));
 
 			if (result.compareToIgnoreCase(NOT_FOUND)== 0) {
 				apiResponse.setResponse(HttpStatus.NOT_FOUND, id, messages, null, request);
@@ -220,7 +222,8 @@ public class RepositoryServiceImpl implements RepositoryService {
 		for(String id : repositoryIds) {
 			try {
 				String result = repositoryDao.deleteRepository(id);
-				messages.add(new ApiMessage(String.format(MESSAGE_TEMPLATE, result, id)));
+				msg = apiUtils.stringFormat(MESSAGE_TEMPLATE, result, id);
+				messages.add(new ApiMessage(msg));
 
 				if (result.compareToIgnoreCase(NOT_FOUND)== 0) {
 					msg = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_MESSAGE+HttpStatus.NOT_FOUND.toString(), result + " : " + id);
@@ -263,7 +266,8 @@ public class RepositoryServiceImpl implements RepositoryService {
 		for(String id : repositoryIds) {
 			try {
 				String result = repositoryDao.resetCache(id);
-				messages.add(new ApiMessage(String.format(MESSAGE_TEMPLATE, result, id)));
+				msg = apiUtils.stringFormat(MESSAGE_TEMPLATE, result, id);
+				messages.add(new ApiMessage(msg));
 
 				if (result.compareToIgnoreCase(NOT_FOUND) != 0) {
 					msg = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_MESSAGE+HttpStatus.OK.toString(), result+" : "+id);
