@@ -576,13 +576,12 @@ The following command with the correct values for the environment variable will 
 ```bash
 docker run -p 3007:3007 --rm \
 -v $HOME/.aws:/home/.aws:ro \
--e "server.port=3007" \
--e "codehub.admin.api.chtoken=[CHTOKEN]" \
--e "codehub.admin.api.es.host=[HOST]" \
--e "codehub.admin.api.es.port=[PORT]" \
--e "codehub.admin.api.es.scheme=[SCHEME]" \
--e "codehub.admin.api.es.scheme=[SCHEME]" \
--e "codehub.admin.api.cloudfront.distributionid=[DISTROID]" \
+-e "SERVER_PORT=3007" \
+-e "CODEHUB_ADMIN_API_CHTOKEN=[CHTOKEN]" \
+-e "CODEHUB_ADMIN_API_ES_HOST=[HOST]" \
+-e "CODEHUB_ADMIN_API_ES_PORT=[PORT]" \
+-e "CODEHUB_ADMIN_API_ES_SCHEME=[SCHEME]" \
+-e "CODEHUB_ADMIN_API_CLOUDFRONT_DISTRIBUTIONID=[DISTROID]" \
 -e "AWS_CREDENTIAL_PROFILES_FILE=/home/.aws/credentials" \
 -e "AWS_PROFILE=awsRoleName" \
 -e "AWS_REGION=my-region-1" \

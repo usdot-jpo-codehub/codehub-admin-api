@@ -19,7 +19,7 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
@@ -47,7 +47,7 @@ import gov.dot.its.codehub.adminapi.model.CHEngagementPopup;
 @RunWith(SpringRunner.class)
 @WebMvcTest(ConfigurationController.class)
 @AutoConfigureRestDocs(outputDir="target/generated-snippets", uriHost="example.com", uriPort=3007, uriScheme="http")
-class ConfigurationControllerTest {
+public class ConfigurationControllerTest {
 
 	private static final String SERVER_SERVLET_CONTEXT_PATH = "server.servlet.context-path";
 	private static final String HEADER_HOST = "Host";
@@ -73,7 +73,7 @@ class ConfigurationControllerTest {
 	}
 
 	@Test
-	void testConfigurations() throws Exception { //NOSONAR
+	public void testConfigurations() throws Exception { //NOSONAR
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setMethod("GET");
 
@@ -99,7 +99,7 @@ class ConfigurationControllerTest {
 	}
 
 	@Test
-	void testCategories() throws Exception { //NOSONAR
+	public void testCategories() throws Exception { //NOSONAR
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setMethod("GET");
 
@@ -125,7 +125,7 @@ class ConfigurationControllerTest {
 	}
 
 	@Test
-	void testCategory() throws Exception { //NOSONAR
+	public void testCategory() throws Exception { //NOSONAR
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setMethod("GET");
 
@@ -151,7 +151,7 @@ class ConfigurationControllerTest {
 	}
 
 	@Test
-	void testAddCategory() throws Exception { //NOSONAR
+	public void testAddCategory() throws Exception { //NOSONAR
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setMethod("POST");
 
@@ -196,7 +196,7 @@ class ConfigurationControllerTest {
 	}
 
 	@Test
-	void testUpdateCategory() throws Exception { //NOSONAR
+	public void testUpdateCategory() throws Exception { //NOSONAR
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setMethod("PUT");
 
@@ -241,7 +241,7 @@ class ConfigurationControllerTest {
 	}
 
 	@Test
-	void testDeleteCategory() throws Exception { //NOSONAR
+	public void testDeleteCategory() throws Exception { //NOSONAR
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setMethod("DELETE");
 
@@ -284,7 +284,7 @@ class ConfigurationControllerTest {
 	}
 
 	@Test
-	void testCategoryImages() throws Exception { //NOSONAR
+	public void testCategoryImages() throws Exception { //NOSONAR
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setMethod("GET");
 
@@ -312,7 +312,7 @@ class ConfigurationControllerTest {
 	}
 
 	@Test
-	void testEngagementPopups() throws Exception { //NOSONAR
+	public void testEngagementPopups() throws Exception { //NOSONAR
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setMethod("GET");
 
@@ -338,7 +338,7 @@ class ConfigurationControllerTest {
 	}
 
 	@Test
-	void testAddEngagementPopup() throws Exception { //NOSONAR
+	public void testAddEngagementPopup() throws Exception { //NOSONAR
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setMethod("POST");
 
@@ -383,7 +383,7 @@ class ConfigurationControllerTest {
 	}
 
 	@Test
-	void testUpdateEngagementPopup() throws Exception { //NOSONAR
+	public void testUpdateEngagementPopup() throws Exception { //NOSONAR
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setMethod("PUT");
 
@@ -428,7 +428,7 @@ class ConfigurationControllerTest {
 	}
 
 	@Test
-	void testDeleteEngagementPopup() throws Exception { //NOSONAR
+	public void testDeleteEngagementPopup() throws Exception { //NOSONAR
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setMethod("DELETE");
 
