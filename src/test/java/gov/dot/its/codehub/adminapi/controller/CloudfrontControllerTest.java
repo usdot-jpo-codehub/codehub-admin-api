@@ -14,7 +14,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
@@ -41,7 +41,7 @@ import gov.dot.its.codehub.adminapi.model.CFInvalidation;
 @RunWith(SpringRunner.class)
 @WebMvcTest(CloudfrontController.class)
 @AutoConfigureRestDocs(outputDir="target/generated-snippets", uriHost="example.com", uriPort=3007, uriScheme="http")
-class CloudfrontControllerTest {
+public class CloudfrontControllerTest {
 	
 	private static final String SERVER_SERVLET_CONTEXT_PATH = "server.servlet.context-path";
 	private static final String HEADER_HOST = "Host";
@@ -66,7 +66,7 @@ class CloudfrontControllerTest {
 	}
 
 	@Test
-	void testInvalidate() throws Exception { //NOSONAR
+	public void testInvalidate() throws Exception { //NOSONAR
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setMethod("POST");
 
@@ -112,7 +112,7 @@ class CloudfrontControllerTest {
 	}
 	
 	@Test
-	void testInvalidateFailure() throws Exception { //NOSONAR
+	public void testInvalidateFailure() throws Exception { //NOSONAR
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setMethod("POST");
 		

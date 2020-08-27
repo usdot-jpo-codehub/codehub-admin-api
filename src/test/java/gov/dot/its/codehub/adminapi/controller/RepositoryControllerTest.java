@@ -20,7 +20,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
@@ -48,7 +48,7 @@ import gov.dot.its.codehub.adminapi.model.CHRepository;
 @RunWith(SpringRunner.class)
 @WebMvcTest(RepositoryController.class)
 @AutoConfigureRestDocs(outputDir="target/generated-snippets", uriHost="example.com", uriPort=3007, uriScheme="http")
-class RepositoryControllerTest {
+public class RepositoryControllerTest {
 
 	private static final String TEST_DATAASSETS_URL = "%s/v1/repositories";
 	private static final String SERVER_SERVLET_CONTEXT_PATH = "server.servlet.context-path";
@@ -74,7 +74,7 @@ class RepositoryControllerTest {
 	private RepositoryService repositoryService;
 
 	@Test
-	void testInvalidToken() throws Exception { //NOSONAR
+	public void testInvalidToken() throws Exception { //NOSONAR
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setMethod("GET");
 
@@ -116,7 +116,7 @@ class RepositoryControllerTest {
 	}
 
 	@Test
-	void testRepositories() throws Exception { //NOSONAR
+	public void testRepositories() throws Exception { //NOSONAR
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setMethod("GET");
 
@@ -158,7 +158,7 @@ class RepositoryControllerTest {
 	}
 
 	@Test
-	void testRepositoriesNoData() throws Exception { //NOSONAR
+	public void testRepositoriesNoData() throws Exception { //NOSONAR
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setMethod("GET");
 
@@ -197,7 +197,7 @@ class RepositoryControllerTest {
 	}
 
 	@Test
-	void testRepositoriesError() throws Exception { //NOSONAR
+	public void testRepositoriesError() throws Exception { //NOSONAR
 		final String verb = "GET";
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setMethod(verb);
@@ -241,7 +241,7 @@ class RepositoryControllerTest {
 	}
 
 	@Test
-	void testAddRepository() throws Exception { //NOSONAR
+	public void testAddRepository() throws Exception { //NOSONAR
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setMethod("POST");
 
@@ -287,7 +287,7 @@ class RepositoryControllerTest {
 	}
 
 	@Test
-	void testAddRepositoryConflict() throws Exception { //NOSONAR
+	public void testAddRepositoryConflict() throws Exception { //NOSONAR
 		final String verb = "POST";
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setMethod(verb);
@@ -337,7 +337,7 @@ class RepositoryControllerTest {
 	}
 
 	@Test
-	void testAddRepositoryError() throws Exception { //NOSONAR
+	public void testAddRepositoryError() throws Exception { //NOSONAR
 		final String verb = "POST";
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setMethod(verb);
@@ -386,7 +386,7 @@ class RepositoryControllerTest {
 	}
 
 	@Test
-	void testUpdateRepository() throws Exception { //NOSONAR
+	public void testUpdateRepository() throws Exception { //NOSONAR
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setMethod("PUT");
 
@@ -431,7 +431,7 @@ class RepositoryControllerTest {
 	}
 
 	@Test
-	void testUpdateRepositoryError() throws Exception { //NOSONAR
+	public void testUpdateRepositoryError() throws Exception { //NOSONAR
 		final String verb = "PUT";
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setMethod(verb);
@@ -477,7 +477,7 @@ class RepositoryControllerTest {
 	}
 
 	@Test
-	void testDeleteRepository() throws Exception { //NOSONAR
+	public void testDeleteRepository() throws Exception { //NOSONAR
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setMethod(VERB_DELETE);
 
@@ -520,7 +520,7 @@ class RepositoryControllerTest {
 	}
 
 	@Test
-	void testDeleteRepositoryNotFound() throws Exception { //NOSONAR
+	public void testDeleteRepositoryNotFound() throws Exception { //NOSONAR
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setMethod(VERB_DELETE);
 
@@ -565,7 +565,7 @@ class RepositoryControllerTest {
 	}
 
 	@Test
-	void testDeleteRepositoryError() throws Exception { //NOSONAR
+	public void testDeleteRepositoryError() throws Exception { //NOSONAR
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setMethod(VERB_DELETE);
 
@@ -609,7 +609,7 @@ class RepositoryControllerTest {
 	}
 
 	@Test
-	void testDeleteRepositories() throws Exception { //NOSONAR
+	public void testDeleteRepositories() throws Exception { //NOSONAR
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setMethod(VERB_DELETE);
 
@@ -661,7 +661,7 @@ class RepositoryControllerTest {
 	}
 
 	@Test
-	void testDeleteRepositoriesError() throws Exception { //NOSONAR
+	public void testDeleteRepositoriesError() throws Exception { //NOSONAR
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setMethod(VERB_DELETE);
 
@@ -716,7 +716,7 @@ class RepositoryControllerTest {
 	}
 
 	@Test
-	void testResetCache() throws Exception { //NOSONAR
+	public void testResetCache() throws Exception { //NOSONAR
 		final String verb = "PATCH";
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setMethod(verb);
@@ -770,7 +770,7 @@ class RepositoryControllerTest {
 	}
 
 	@Test
-	void testResetCacheError() throws Exception { //NOSONAR
+	public void testResetCacheError() throws Exception { //NOSONAR
 		final String verb = "PATCH";
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setMethod(verb);
