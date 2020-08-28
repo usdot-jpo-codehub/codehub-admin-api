@@ -11,11 +11,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.security.SecureRandom;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -38,6 +35,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import gov.dot.its.codehub.adminapi.MockDataConfiguration;
 import gov.dot.its.codehub.adminapi.business.ConfigurationService;
 import gov.dot.its.codehub.adminapi.model.ApiResponse;
 import gov.dot.its.codehub.adminapi.model.CHCategory;
@@ -54,6 +52,7 @@ public class ConfigurationControllerTest {
 	private static final String HEADER_CONTENT_LENGTH = "Content-Length";
 	private static final String URL_CATEGORIES_TEMPLATE = "%s/v1/configurations/categories";
 	private static final String URL_ENGAGEMENTPOPUP_TEMPLATE = "%s/v1/configurations/engagementpopups";
+	private static final String TEST_ID = "1";
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -67,9 +66,10 @@ public class ConfigurationControllerTest {
 	@MockBean
 	private ConfigurationService configurationService;
 
-	private SecureRandom random;
+	private MockDataConfiguration mockData;
+
 	public ConfigurationControllerTest() {
-		this.random = new SecureRandom();
+		this.mockData = new MockDataConfiguration();
 	}
 
 	@Test
@@ -77,7 +77,7 @@ public class ConfigurationControllerTest {
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setMethod("GET");
 
-		CHConfiguration configuration = this.getFakeConfiguration();
+		CHConfiguration configuration = this.mockData.getFakeConfiguration();
 
 		ApiResponse<CHConfiguration> apiResponse = new ApiResponse<>();
 		apiResponse.setResponse(HttpStatus.OK, configuration, null, null, request);
@@ -103,7 +103,7 @@ public class ConfigurationControllerTest {
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setMethod("GET");
 
-		CHConfiguration configuration = this.getFakeConfiguration();
+		CHConfiguration configuration = this.mockData.getFakeConfiguration();
 
 		ApiResponse<List<CHCategory>> apiResponse = new ApiResponse<>();
 		apiResponse.setResponse(HttpStatus.OK, configuration.getCategories(), null, null, request);
@@ -129,7 +129,7 @@ public class ConfigurationControllerTest {
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setMethod("GET");
 
-		CHCategory category = this.getFakeCategory();
+		CHCategory category = this.mockData.getFakeCategory(TEST_ID);
 
 		ApiResponse<CHCategory> apiResponse = new ApiResponse<>();
 		apiResponse.setResponse(HttpStatus.OK, category, null, null, request);
@@ -155,7 +155,7 @@ public class ConfigurationControllerTest {
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setMethod("POST");
 
-		CHCategory category = this.getFakeCategory();
+		CHCategory category = this.mockData.getFakeCategory(TEST_ID);
 
 		ApiResponse<CHCategory> apiResponse = new ApiResponse<>();
 		apiResponse.setResponse(HttpStatus.OK, category, null, null, request);
@@ -200,7 +200,7 @@ public class ConfigurationControllerTest {
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setMethod("PUT");
 
-		CHCategory category = this.getFakeCategory();
+		CHCategory category = this.mockData.getFakeCategory(TEST_ID);
 
 		ApiResponse<CHCategory> apiResponse = new ApiResponse<>();
 		apiResponse.setResponse(HttpStatus.OK, category, null, null, request);
@@ -245,7 +245,7 @@ public class ConfigurationControllerTest {
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setMethod("DELETE");
 
-		CHCategory chCategory = this.getFakeCategory();
+		CHCategory chCategory = this.mockData.getFakeCategory(TEST_ID);
 
 		ApiResponse<CHCategory> apiResponse = new ApiResponse<>();
 		apiResponse.setResponse(HttpStatus.OK, chCategory, null, null, request);
@@ -316,7 +316,7 @@ public class ConfigurationControllerTest {
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setMethod("GET");
 
-		CHConfiguration configuration = this.getFakeConfiguration();
+		CHConfiguration configuration = this.mockData.getFakeConfiguration();
 
 		ApiResponse<List<CHEngagementPopup>> apiResponse = new ApiResponse<>();
 		apiResponse.setResponse(HttpStatus.OK, configuration.getEngagementPopups(), null, null, request);
@@ -342,7 +342,7 @@ public class ConfigurationControllerTest {
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setMethod("POST");
 
-		CHEngagementPopup engagementPopup = this.getFakeEngagementPopup();
+		CHEngagementPopup engagementPopup = this.mockData.getFakeEngagementPopup(TEST_ID);
 
 		ApiResponse<CHEngagementPopup> apiResponse = new ApiResponse<>();
 		apiResponse.setResponse(HttpStatus.OK, engagementPopup, null, null, request);
@@ -387,7 +387,7 @@ public class ConfigurationControllerTest {
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setMethod("PUT");
 
-		CHEngagementPopup engagementPopup = this.getFakeEngagementPopup();
+		CHEngagementPopup engagementPopup = this.mockData.getFakeEngagementPopup(TEST_ID);
 
 		ApiResponse<CHEngagementPopup> apiResponse = new ApiResponse<>();
 		apiResponse.setResponse(HttpStatus.OK, engagementPopup, null, null, request);
@@ -432,7 +432,7 @@ public class ConfigurationControllerTest {
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setMethod("DELETE");
 
-		CHEngagementPopup engagementPopup = this.getFakeEngagementPopup();
+		CHEngagementPopup engagementPopup = this.mockData.getFakeEngagementPopup(TEST_ID);
 
 		ApiResponse<CHEngagementPopup> apiResponse = new ApiResponse<>();
 		apiResponse.setResponse(HttpStatus.OK, engagementPopup, null, null, request);
@@ -487,56 +487,5 @@ public class ConfigurationControllerTest {
 								Preprocessors.removeHeaders(HEADER_HOST, HEADER_CONTENT_LENGTH)
 								)
 						));
-	}
-
-	private CHConfiguration getFakeConfiguration() {
-		CHConfiguration configuration = new CHConfiguration();
-		configuration.setId("default-configuration");
-		configuration.setName(configuration.getId());
-
-		List<CHCategory> categories = new ArrayList<>();
-		for (int i=0; i<3; i++) {
-			CHCategory category = this.getFakeCategory();
-			categories.add(category);
-		}
-
-		configuration.setCategories(categories);
-
-		List<CHEngagementPopup> engagementPopups = new ArrayList<>();
-		for(int i=0; i<2; i++) {
-			CHEngagementPopup engagementPopup = this.getFakeEngagementPopup();
-			engagementPopups.add(engagementPopup);
-		}
-
-		configuration.setEngagementPopups(engagementPopups);
-
-		return configuration;
-	}
-
-	private CHCategory getFakeCategory() {
-		int id = this.random.nextInt(100);
-		CHCategory category = new CHCategory();
-		category.setDescription(String.format("Description-%s", id));
-		category.setEnabled(true);
-		category.setId(UUID.randomUUID().toString());
-		category.setLastModified(new Date());
-		category.setName(String.format("Category-%s", id));
-		category.setImageFileName("http://path.to.the.image/image1.png");
-		category.setOrderPopular(1L);
-		category.setPopular(true);
-
-		return category;
-	}
-
-	private CHEngagementPopup getFakeEngagementPopup() {
-		int id = this.random.nextInt(100);
-		CHEngagementPopup engagementPopup = new CHEngagementPopup();
-		engagementPopup.setId(UUID.randomUUID().toString());
-		engagementPopup.setActive(false);
-		engagementPopup.setContent(String.format("<h1>This is fake %s</h1>",id));
-		engagementPopup.setDescription(String.format("Description %s", id));
-		engagementPopup.setLastModified(new Date());
-		engagementPopup.setName(String.format("EngagementPopup-%s", id));
-		return engagementPopup;
 	}
 }

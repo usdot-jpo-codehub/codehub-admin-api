@@ -67,7 +67,7 @@ public class RepositoryServiceImpl implements RepositoryService {
 
 			List<CHRepository> data = repositoryDao.getAll(limit);
 
-			if (data != null && !data.isEmpty()) {
+			if (!data.isEmpty()) {
 				apiResponse.setResponse(HttpStatus.OK, data, null, null, request);
 				msg = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_GET_ALL+HttpStatus.OK.toString(), String.valueOf(data.size()));
 				logger.info(msg);
@@ -234,7 +234,7 @@ public class RepositoryServiceImpl implements RepositoryService {
 				}
 
 			} catch(ElasticsearchStatusException | IOException e) {
-				apiUtils.getErrorsFromException(errors, e);
+				errors.addAll(apiUtils.getErrorsFromException(errors, e));
 			}
 		}
 
@@ -278,7 +278,7 @@ public class RepositoryServiceImpl implements RepositoryService {
 				}
 
 			} catch(ElasticsearchStatusException | IOException e) {
-				apiUtils.getErrorsFromException(errors, e);
+				errors.addAll(apiUtils.getErrorsFromException(errors, e));
 			}
 		}
 

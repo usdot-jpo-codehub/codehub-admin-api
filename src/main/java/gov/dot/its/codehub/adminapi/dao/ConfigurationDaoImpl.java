@@ -12,7 +12,6 @@ import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.RequestOptions;
-import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.script.Script;
 import org.elasticsearch.script.ScriptType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,16 +46,13 @@ public class ConfigurationDaoImpl implements ConfigurationDao {
 	@Autowired
 	private ObjectMapper objectMapper;
 
-	private RestHighLevelClient restHighLevelClient;
-
-	public ConfigurationDaoImpl(RestHighLevelClient restHighLevelClient) {
-		this.restHighLevelClient = restHighLevelClient;
-	}
+	@Autowired
+	private ESClientDao esClientDao;
 
 	@Override
 	public CHConfiguration getConfiguration() throws IOException {
 		GetRequest getRequest = new GetRequest(configurationsIndex, "_doc", configurationId);
-		GetResponse getResponse = restHighLevelClient.get(getRequest, RequestOptions.DEFAULT);
+		GetResponse getResponse = esClientDao.get(getRequest, RequestOptions.DEFAULT);
 		if (!getResponse.isExists()) {
 			return null;
 		}
@@ -72,7 +68,7 @@ public class ConfigurationDaoImpl implements ConfigurationDao {
 	@Override
 	public List<CHCategory> getCategories() throws IOException {
 		GetRequest getRequest = new GetRequest(configurationsIndex, "_doc", configurationId);
-		GetResponse getResponse = restHighLevelClient.get(getRequest, RequestOptions.DEFAULT);
+		GetResponse getResponse = esClientDao.get(getRequest, RequestOptions.DEFAULT);
 		if (!getResponse.isExists()) {
 			return new ArrayList<>();
 		}
@@ -112,7 +108,7 @@ public class ConfigurationDaoImpl implements ConfigurationDao {
 		UpdateRequest updateRequest = new UpdateRequest(configurationsIndex, "_doc", configurationId);
 		updateRequest.script(inline);
 
-		UpdateResponse updateResponse = restHighLevelClient.update(updateRequest, RequestOptions.DEFAULT);
+		UpdateResponse updateResponse = esClientDao.update(updateRequest, RequestOptions.DEFAULT);
 
 		return updateResponse.getResult().name();
 
@@ -137,7 +133,7 @@ public class ConfigurationDaoImpl implements ConfigurationDao {
 		UpdateRequest updateRequest = new UpdateRequest(configurationsIndex, "_doc", configurationId);
 		updateRequest.script(inline);
 
-		UpdateResponse updateResponse = restHighLevelClient.update(updateRequest, RequestOptions.DEFAULT);
+		UpdateResponse updateResponse = esClientDao.update(updateRequest, RequestOptions.DEFAULT);
 
 		return updateResponse.getResult().name();
 	}
@@ -179,17 +175,17 @@ public class ConfigurationDaoImpl implements ConfigurationDao {
 		UpdateRequest updateRequest = new UpdateRequest(configurationsIndex, "_doc", configurationId);
 		updateRequest.script(inline);
 
-		UpdateResponse updateResponse = restHighLevelClient.update(updateRequest, RequestOptions.DEFAULT);
+		UpdateResponse updateResponse = esClientDao.update(updateRequest, RequestOptions.DEFAULT);
 
 		return updateResponse.getResult().name() != null;
 	}
 
 	@Override
 	public List<String> getCategoryImages() throws IOException {
-		ObjectMapper mapper = new ObjectMapper();
+		List<String> images = new ArrayList<>();
 
 		TypeReference<List<String>> typeRef= new TypeReference<List<String>>() {};
-		List<String> images = mapper.readValue(new URL(this.imagesList), typeRef);
+		images = objectMapper.readValue(new URL(this.imagesList), typeRef);
 		for(int i=0; i<images.size(); i++) {
 			images.set(i, String.format("%s/%s", this.imagesPath, images.get(i)));
 		}
@@ -199,7 +195,7 @@ public class ConfigurationDaoImpl implements ConfigurationDao {
 	@Override
 	public List<CHEngagementPopup> getEngagementPopups() throws IOException {
 		GetRequest getRequest = new GetRequest(configurationsIndex, "_doc", configurationId);
-		GetResponse getResponse = restHighLevelClient.get(getRequest, RequestOptions.DEFAULT);
+		GetResponse getResponse = esClientDao.get(getRequest, RequestOptions.DEFAULT);
 		if (!getResponse.isExists()) {
 			return new ArrayList<>();
 		}
@@ -239,7 +235,7 @@ public class ConfigurationDaoImpl implements ConfigurationDao {
 		UpdateRequest updateRequest = new UpdateRequest(configurationsIndex, "_doc", configurationId);
 		updateRequest.script(inline);
 
-		UpdateResponse updateResponse = restHighLevelClient.update(updateRequest, RequestOptions.DEFAULT);
+		UpdateResponse updateResponse = esClientDao.update(updateRequest, RequestOptions.DEFAULT);
 
 		return updateResponse.getResult().name();
 
@@ -268,7 +264,7 @@ public class ConfigurationDaoImpl implements ConfigurationDao {
 		UpdateRequest updateRequest = new UpdateRequest(configurationsIndex, "_doc", configurationId);
 		updateRequest.script(inline);
 
-		UpdateResponse updateResponse = restHighLevelClient.update(updateRequest, RequestOptions.DEFAULT);
+		UpdateResponse updateResponse = esClientDao.update(updateRequest, RequestOptions.DEFAULT);
 
 		return updateResponse.getResult().name();
 	}
@@ -294,7 +290,7 @@ public class ConfigurationDaoImpl implements ConfigurationDao {
 		UpdateRequest updateRequest = new UpdateRequest(configurationsIndex, "_doc", configurationId);
 		updateRequest.script(inline);
 
-		UpdateResponse updateResponse = restHighLevelClient.update(updateRequest, RequestOptions.DEFAULT);
+		UpdateResponse updateResponse = esClientDao.update(updateRequest, RequestOptions.DEFAULT);
 
 		return updateResponse.getResult().name() != null;
 	}
