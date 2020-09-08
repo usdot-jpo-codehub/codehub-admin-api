@@ -14,7 +14,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +38,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import gov.dot.its.codehub.adminapi.MockDataRepository;
 import gov.dot.its.codehub.adminapi.business.RepositoryService;
 import gov.dot.its.codehub.adminapi.model.ApiError;
 import gov.dot.its.codehub.adminapi.model.ApiMessage;
@@ -61,6 +61,8 @@ public class RepositoryControllerTest {
 	private static final String HASH_ID_2 = "7f3bac27fc81d39ffa8ede58b39c8fb6";
 	private static final String HASH_ID_3 = "fc4e98b95dc24f763621c54fe50ded24";
 
+	private MockDataRepository mockData;
+
 	@Autowired
 	private MockMvc mockMvc;
 
@@ -72,6 +74,10 @@ public class RepositoryControllerTest {
 
 	@MockBean
 	private RepositoryService repositoryService;
+
+	public RepositoryControllerTest() {
+		mockData = new MockDataRepository();
+	}
 
 	@Test
 	public void testInvalidToken() throws Exception { //NOSONAR
@@ -120,7 +126,7 @@ public class RepositoryControllerTest {
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setMethod("GET");
 
-		List<CHRepository> chRepositories = this.getFakeListOfRepositories();
+		List<CHRepository> chRepositories = mockData.getFakeListOfRepositories();
 
 		ApiResponse<List<CHRepository>> apiResponse = new ApiResponse<>();
 		apiResponse.setResponse(HttpStatus.OK, chRepositories, null, null, request);
@@ -245,7 +251,7 @@ public class RepositoryControllerTest {
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setMethod("POST");
 
-		CHRepository chRepository = this.getFakeCHRepository();
+		CHRepository chRepository = mockData.getFakeCHRepository();
 
 		ApiResponse<CHRepository> apiResponse = new ApiResponse<>();
 		apiResponse.setResponse(HttpStatus.OK, chRepository, null, null, request);
@@ -292,7 +298,7 @@ public class RepositoryControllerTest {
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setMethod(verb);
 
-		CHRepository chRepository = this.getFakeCHRepository();
+		CHRepository chRepository = mockData.getFakeCHRepository();
 
 		List<ApiError> errors = new ArrayList<>();
 		errors.add(new ApiError(ERROR_DESCRIPTION));
@@ -345,7 +351,7 @@ public class RepositoryControllerTest {
 		List<ApiError> errors = new ArrayList<>();
 		errors.add(new ApiError(ERROR_DESCRIPTION));
 
-		CHRepository chRepository = this.getFakeCHRepository();
+		CHRepository chRepository = mockData.getFakeCHRepository();
 
 		ApiResponse<CHRepository> apiResponse = new ApiResponse<>();
 		apiResponse.setResponse(HttpStatus.INTERNAL_SERVER_ERROR, null, null, errors, request);
@@ -390,7 +396,7 @@ public class RepositoryControllerTest {
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setMethod("PUT");
 
-		CHRepository chRepository = this.getFakeCHRepository();
+		CHRepository chRepository = mockData.getFakeCHRepository();
 		String chRepositoryStr = objectMapper.writeValueAsString(chRepository);
 
 		ApiResponse<CHRepository> apiResponse = new ApiResponse<>();
@@ -436,7 +442,7 @@ public class RepositoryControllerTest {
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setMethod(verb);
 
-		CHRepository chRepository = this.getFakeCHRepository();
+		CHRepository chRepository = mockData.getFakeCHRepository();
 		String chRepositoryStr = objectMapper.writeValueAsString(chRepository);
 
 		List<ApiError> errors = new ArrayList<>();
@@ -481,7 +487,7 @@ public class RepositoryControllerTest {
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setMethod(VERB_DELETE);
 
-		CHRepository chRepository = this.getFakeCHRepository();
+		CHRepository chRepository = mockData.getFakeCHRepository();
 
 		ApiResponse<String> apiResponse = new ApiResponse<>();
 		apiResponse.setResponse(HttpStatus.OK, chRepository.getId(), null, null, request);
@@ -524,7 +530,7 @@ public class RepositoryControllerTest {
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setMethod(VERB_DELETE);
 
-		CHRepository chRepository = this.getFakeCHRepository();
+		CHRepository chRepository = mockData.getFakeCHRepository();
 		List<ApiMessage> messages = new ArrayList<>();
 		messages.add(new ApiMessage(MESSAGE_DESCRIPTION));
 
@@ -569,7 +575,7 @@ public class RepositoryControllerTest {
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setMethod(VERB_DELETE);
 
-		CHRepository chRepository = this.getFakeCHRepository();
+		CHRepository chRepository = mockData.getFakeCHRepository();
 		List<ApiError> errors = new ArrayList<>();
 		errors.add(new ApiError(ERROR_DESCRIPTION));
 
@@ -822,40 +828,6 @@ public class RepositoryControllerTest {
 		assertTrue(responseApi.getMessages() != null);
 		assertTrue(responseApi.getErrors() != null);
 		assertEquals(verb, responseApi.getVerb());
-	}
-
-	private List<CHRepository> getFakeListOfRepositories() {
-		List<CHRepository> repositories = new ArrayList<>();
-		for(int i=1 ; i<=3; i++) {
-			CHRepository repository = getFakeCHRepository(
-					String.format("[MD5-HASH-%d]",i),
-					String.format("Repository-Name-%d", i), 
-					String.format("Repository-Owner-%d", i),
-					String.format("http://www.example.com/owner%d/repository%d", i, i)
-					);
-			repositories.add(repository);
-		}
-
-		return repositories;
-	}
-
-	private CHRepository getFakeCHRepository(String id, String name, String owner, String url) {
-		CHRepository chRepository = new CHRepository();
-		chRepository.setId(id);
-
-		chRepository.getSourceData().setName(name);
-		chRepository.getSourceData().getOwner().setName(owner);
-		chRepository.getSourceData().setRepositoryUrl(url);
-
-		chRepository.getCodehubData().setIngestionEnabled(true);
-		chRepository.getCodehubData().setLastModified(new Timestamp(System.currentTimeMillis()));
-		chRepository.getCodehubData().setEtag("c99aa9c9867ddb8693e7740d0ca0c00f");
-
-		return chRepository;
-	}
-
-	private CHRepository getFakeCHRepository() {
-		return this.getFakeCHRepository(HASH_ID_1, "Repository-Name", "Repository-Owner", "http://www.example.com/owner/repository");
 	}
 
 }
