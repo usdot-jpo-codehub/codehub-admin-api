@@ -107,7 +107,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
 			List<CHCategory> categories = configurationDao.getCategories();
 
-			if (categories != null && !categories.isEmpty()) {
+			if (!categories.isEmpty()) {
 				apiResponse.setResponse(HttpStatus.OK, categories, null, null, request);
 				logMessage = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_MSG,HttpStatus.OK.toString(), categories.size());
 				logger.info(logMessage);
@@ -311,7 +311,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
 			List<String> images = configurationDao.getCategoryImages();
 
-			if (images != null && !images.isEmpty()) {
+			if (!images.isEmpty()) {
 				apiResponse.setResponse(HttpStatus.OK, images, null, null, request);
 				msg = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_MSG,HttpStatus.OK.toString(), images.size());
 				logger.info(msg);
@@ -349,7 +349,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
 			List<CHEngagementPopup> engagementPopups = configurationDao.getEngagementPopups();
 
-			if (engagementPopups != null && !engagementPopups.isEmpty()) {
+			if (!engagementPopups.isEmpty()) {
 				apiResponse.setResponse(HttpStatus.OK, engagementPopups, null, null, request);
 				logMsg = apiUtils.stringFormat(MESSAGE_TEMPLATE, RESPONSE_MSG,HttpStatus.OK.toString()+" "+engagementPopups.size());
 				logger.info(logMsg);

@@ -15,7 +15,6 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.RequestOptions;
-import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
@@ -51,11 +50,8 @@ public class RepositoryDaoImpl implements RepositoryDao {
 	@Autowired
 	private ApiUtils apiUtils;
 
-	private RestHighLevelClient restHighLevelClient;
-
-	public RepositoryDaoImpl(RestHighLevelClient restHighLevelClient) {
-		this.restHighLevelClient = restHighLevelClient;
-	}
+	@Autowired
+	private ESClientDao esClientDao;
 
 	@Override
 	public List<CHRepository> getAll(int limit) throws IOException {
@@ -71,7 +67,7 @@ public class RepositoryDaoImpl implements RepositoryDao {
 
 		SearchResponse searchResponse = null;
 
-		searchResponse = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+		searchResponse = esClientDao.search(searchRequest, RequestOptions.DEFAULT);
 		SearchHits hits = searchResponse.getHits();
 
 		SearchHit[] searchHits = hits.getHits();
@@ -99,7 +95,7 @@ public class RepositoryDaoImpl implements RepositoryDao {
 		IndexRequest indexRequest = new IndexRequest(reposIndex, "_doc", chRepository.getId());
 		indexRequest.source(map, XContentType.JSON);
 
-		IndexResponse indexResponse = restHighLevelClient.index(indexRequest, RequestOptions.DEFAULT);
+		IndexResponse indexResponse = esClientDao.index(indexRequest, RequestOptions.DEFAULT);
 
 		return indexResponse.getResult().name();
 	}
@@ -113,7 +109,7 @@ public class RepositoryDaoImpl implements RepositoryDao {
 		UpdateRequest updateRequest = new UpdateRequest(reposIndex, "_doc", chRepository.getId());
 		updateRequest.doc(map, XContentType.JSON);
 
-		UpdateResponse updateResponse = restHighLevelClient.update(updateRequest, RequestOptions.DEFAULT);
+		UpdateResponse updateResponse = esClientDao.update(updateRequest, RequestOptions.DEFAULT);
 
 		return updateResponse.getResult().name();
 	}
@@ -121,7 +117,7 @@ public class RepositoryDaoImpl implements RepositoryDao {
 	@Override
 	public String deleteRepository(String id) throws IOException {
 		DeleteRequest deleteRequest = new DeleteRequest(reposIndex, "_doc", id);
-		DeleteResponse deleteResponse = restHighLevelClient.delete(deleteRequest, RequestOptions.DEFAULT);
+		DeleteResponse deleteResponse = esClientDao.delete(deleteRequest, RequestOptions.DEFAULT);
 		return deleteResponse.getResult().name();
 	}
 
@@ -133,7 +129,7 @@ public class RepositoryDaoImpl implements RepositoryDao {
 		UpdateRequest updateRequest = new UpdateRequest(reposIndex, "_doc", id);
 		updateRequest.doc(jsonObj, XContentType.JSON);
 
-		UpdateResponse updateResponse = restHighLevelClient.update(updateRequest, RequestOptions.DEFAULT);
+		UpdateResponse updateResponse = esClientDao.update(updateRequest, RequestOptions.DEFAULT);
 
 		return updateResponse.getResult().name();
 	}
@@ -145,7 +141,7 @@ public class RepositoryDaoImpl implements RepositoryDao {
 		getRequest.fetchSourceContext(new FetchSourceContext(false));
 		getRequest.storedFields("_none_");
 
-		return restHighLevelClient.exists(getRequest, RequestOptions.DEFAULT);
+		return esClientDao.exists(getRequest, RequestOptions.DEFAULT);
 	}
 
 	@Override
